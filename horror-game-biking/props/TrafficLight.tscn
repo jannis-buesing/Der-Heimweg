@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://dj7lav4mpx3qa"]
+
+[ext_resource type="Script" uid="uid://bkqfub8apm5su" path="res://props/traffic_light.gd" id="1_traffic"]
+[ext_resource type="Script" uid="uid://ffnq137j7twv" path="res://interactable.gd" id="2_interactable"]
+
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pole"]
+albedo_color = Color(0.18, 0.2, 0.22, 1)
+metallic = 0.8
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_housing"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button_box"]
+albedo_color = Color(0.85, 0.75, 0.1, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_indicator"]
+albedo_color = Color(0.9, 0.1, 0.1, 1)
+roughness = 0.3
+emission_enabled = false
+emission = Color(1, 0.2, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pole"]
+material = SubResource("StandardMaterial3D_pole")
+top_radius = 0.06
+bottom_radius = 0.09
+height = 4.2
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_housing"]
+material = SubResource("StandardMaterial3D_housing")
+size = Vector3(0.32, 0.95, 0.28)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lens"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.03
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="BoxMesh_button_box"]
+material = SubResource("StandardMaterial3D_button_box")
+size = Vector3(0.14, 0.24, 0.14)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_indicator"]
+material = SubResource("StandardMaterial3D_indicator")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.02
+radial_segments = 8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pole"]
+height = 4.2
+radius = 0.12
+
+[node name="TrafficLight" type="StaticBody3D"]
+script = ExtResource("1_traffic")
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+mesh = SubResource("CylinderMesh_pole")
+
+[node name="Housing" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -0.22)
+
+[node name="HousingMesh" type="MeshInstance3D" parent="Housing"]
+mesh = SubResource("BoxMesh_housing")
+
+[node name="RedLens" type="MeshInstance3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, -0.14)
+mesh = SubResource("CylinderMesh_lens")
+
+[node name="YellowLens" type="MeshInstance3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.14)
+mesh = SubResource("CylinderMesh_lens")
+
+[node name="GreenLens" type="MeshInstance3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.3, -0.14)
+mesh = SubResource("CylinderMesh_lens")
+
+[node name="RedLight" type="OmniLight3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.25)
+light_color = Color(1, 0.15, 0.15, 1)
+light_energy = 3.5
+omni_range = 6.0
+
+[node name="YellowLight" type="OmniLight3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.25)
+visible = false
+light_color = Color(1, 0.85, 0.15, 1)
+light_energy = 3.5
+omni_range = 6.0
+
+[node name="GreenLight" type="OmniLight3D" parent="Housing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, -0.25)
+visible = false
+light_color = Color(0.15, 1, 0.35, 1)
+light_energy = 3.5
+omni_range = 6.0
+
+[node name="ButtonBox" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.12)
+
+[node name="BoxMesh" type="MeshInstance3D" parent="ButtonBox"]
+mesh = SubResource("BoxMesh_button_box")
+
+[node name="Indicator" type="MeshInstance3D" parent="ButtonBox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.06, -0.075)
+mesh = SubResource("CylinderMesh_indicator")
+
+[node name="Interactable" type="Node3D" parent="." node_paths=PackedStringArray("highlight_meshes")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, -0.12)
+script = ExtResource("2_interactable")
+prompt_text = "Ampel anfordern"
+is_small_item = true
+highlight_meshes = [NodePath("../ButtonBox/BoxMesh"), NodePath("../ButtonBox/Indicator")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("CylinderShape3D_pole")

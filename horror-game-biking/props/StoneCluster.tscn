@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dp1okklgo1yxk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
+albedo_color = Color(0.35, 0.35, 0.36, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock1"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.7, 0.45, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock2"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.5, 0.35, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock3"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.35, 0.25, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cluster"]
+size = Vector3(1.2, 0.5, 1.1)
+
+[node name="StoneCluster" type="StaticBody3D" unique_id=728619062]
+
+[node name="Rock1" type="MeshInstance3D" parent="." unique_id=1174811340]
+transform = Transform3D(0.9659258, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.9659258, 0, 0.225, 0)
+mesh = SubResource("BoxMesh_rock1")
+
+[node name="Rock2" type="MeshInstance3D" parent="." unique_id=996717727]
+transform = Transform3D(0.7071068, 0.2, -0.678, 0, 0.958, 0.286, 0.7071068, -0.2, 0.678, 0.4, 0.175, 0.2)
+mesh = SubResource("BoxMesh_rock2")
+
+[node name="Rock3" type="MeshInstance3D" parent="." unique_id=1528847883]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -0.35, 0.125, -0.2)
+mesh = SubResource("BoxMesh_rock3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1157709649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_cluster")

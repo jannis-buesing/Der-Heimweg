@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cb5k8v4pm3q2a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_log_bark"]
+albedo_color = Color(0.24, 0.16, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_log"]
+material = SubResource("StandardMaterial3D_log_bark")
+top_radius = 0.14
+bottom_radius = 0.14
+radial_segments = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_woodpile"]
+size = Vector3(1.2, 0.9, 2.1)
+
+[node name="WoodPile" type="StaticBody3D" unique_id=6060407]
+
+[node name="Log1" type="MeshInstance3D" parent="." unique_id=1611466432]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.3, 0.15, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="Log2" type="MeshInstance3D" parent="." unique_id=44929021]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.15, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="Log3" type="MeshInstance3D" parent="." unique_id=241031627]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.3, 0.15, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="Log4" type="MeshInstance3D" parent="." unique_id=1056723644]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.15, 0.42, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="Log5" type="MeshInstance3D" parent="." unique_id=320391762]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.15, 0.42, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="Log6" type="MeshInstance3D" parent="." unique_id=397344332]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.68, 0)
+mesh = SubResource("CylinderMesh_log")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1812007208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_woodpile")

@@ -1,0 +1,223 @@
+[gd_scene format=4 uid="uid://d2hvrsmd8fj3i"]
+
+[ext_resource type="Script" uid="uid://csbc6if2etbwf" path="res://player.gd" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://c6f2vhx8u3kqa" path="res://Bike.tscn" id="2_bike"]
+[ext_resource type="Script" uid="uid://c5mgfneyh8ne4" path="res://interaction_manager.gd" id="2_interaction"]
+[ext_resource type="PackedScene" uid="uid://btr82k7pmvj3x" path="res://props/Tree.tscn" id="3_tree"]
+[ext_resource type="PackedScene" uid="uid://c8l7k5qjm4v2n" path="res://props/StreetLight.tscn" id="4_streetlight"]
+[ext_resource type="Script" uid="uid://dt0mhow5llqcn" path="res://forest_manager.gd" id="5_hhcpw"]
+[ext_resource type="PackedScene" uid="uid://dp5r7xakx3vm2" path="res://props/Bench.tscn" id="6_bench"]
+[ext_resource type="PackedScene" uid="uid://cx6y8vpmq27k4" path="res://props/TrashBin.tscn" id="7_trashbin"]
+[ext_resource type="PackedScene" uid="uid://b8m3y6qpv4j1a" path="res://props/Fence.tscn" id="8_fence"]
+[ext_resource type="PackedScene" uid="uid://df7k4v8mp3q1n" path="res://props/House.tscn" id="9_house"]
+[ext_resource type="PackedScene" uid="uid://b7v2nakpx3q8a" path="res://props/RoadMarkings.tscn" id="10_markings"]
+[ext_resource type="PackedScene" uid="uid://dm8x4v2kpnaqx" path="res://props/Crosswalk.tscn" id="11_crosswalk"]
+[ext_resource type="PackedScene" uid="uid://dj7lav4mpx3qa" path="res://props/TrafficLight.tscn" id="12_trafficlight"]
+[ext_resource type="PackedScene" uid="uid://bv7m3y6kpm8wx" path="res://props/Car.tscn" id="13_car"]
+[ext_resource type="PackedScene" uid="uid://df8k3wapm7q2a" path="res://props/Mailbox.tscn" id="16_mailbox"]
+[ext_resource type="PackedScene" uid="uid://df6y7k3vpnawa" path="res://props/BusStop.tscn" id="17_busstop"]
+[ext_resource type="PackedScene" uid="uid://b5m7q2kpyaw8v" path="res://props/Flower.tscn" id="20_devvj"]
+[ext_resource type="PackedScene" uid="uid://c6r8k3vpm2raa" path="res://props/RoadSign.tscn" id="20_roadsign"]
+[ext_resource type="PackedScene" uid="uid://dg8m3y6kpwaqa" path="res://props/FlowerPatch.tscn" id="21_3b0ty"]
+[ext_resource type="PackedScene" uid="uid://c7x8v4mplaq2a" path="res://props/FlashlightItem.tscn" id="21_flashlight_item"]
+[ext_resource type="PackedScene" uid="uid://cb5k8v4pm3q2a" path="res://props/WoodPile.tscn" id="22_xrxkg"]
+[ext_resource type="PackedScene" uid="uid://dp1okklgo1yxk" path="res://props/StoneCluster.tscn" id="24_sqvbp"]
+[ext_resource type="PackedScene" path="res://props/TJunctionMarkings.tscn" id="25_hri7i"]
+[ext_resource type="Shader" uid="uid://dpkju0xq2hh24" path="res://shaders/terrain_path_blend.gdshader" id="25_terrain_shader"]
+[ext_resource type="PackedScene" uid="uid://dac1skwegylwy" path="res://props/GirlfriendNPC.tscn" id="26_girlfriend"]
+[ext_resource type="PackedScene" uid="uid://bqbiuahke7d45" path="res://ui/DialogueUI.tscn" id="27_dialogue_ui"]
+[ext_resource type="PackedScene" uid="uid://cxnwnk25dyl63" path="res://ui/FadeOverlay.tscn" id="28_fade_overlay"]
+[ext_resource type="Script" uid="uid://m6t4luvdoefc" path="res://start_sequence_manager.gd" id="29_seq_mgr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_terrain_path"]
+render_priority = 0
+shader = ExtResource("25_terrain_shader")
+shader_parameter/grass_color = Color(0.07978494, 0.123060234, 0.046189062, 1)
+shader_parameter/path_color = Color(0.16836926, 0.11353069, 0.04694098, 1)
+shader_parameter/edge_color = Color(0.14290592, 0.106905915, 0.0673021, 1)
+shader_parameter/roughness = 1.0
+shader_parameter/path_width = 4.0
+shader_parameter/feather_amount = 0.694
+shader_parameter/noise_scale = 7.90400037218012
+shader_parameter/noise_strength = 2.0
+shader_parameter/road_segments = PackedVector4Array(0.0041280687, 32.496002, 0.059969112, 31.453745, 0.059969112, 31.453745, 0.14873208, 30.102922, 0.14873208, 30.102922, 0.261465, 28.498066, 0.261465, 28.498066, 0.38921595, 26.69371, 0.38921595, 26.69371, 0.52303284, 24.744389, 0.52303284, 24.744389, 0.65396386, 22.704636, 0.65396386, 22.704636, 0.773057, 20.628979, 0.773057, 20.628979, 0.8713602, 18.571962, 0.8713602, 18.571962, 0.9399214, 16.588116, 0.9399214, 16.588116, 0.9697888, 14.731971, 0.9697888, 14.731971, 0.9520105, 13.058059, 0.9520105, 13.058059, 0.87763405, 11.620922, 0.87763405, 11.620922, 0.7081809, 10.400518, 0.7081809, 10.400518, 0.42892978, 9.324608, 0.42892978, 9.324608, 0.06656614, 8.369417, 0.06656614, 8.369417, -0.35222474, 7.51117, -0.35222474, 7.51117, -0.8007574, 6.726092, -0.8007574, 6.726092, -1.2523468, 5.990408, -1.2523468, 5.990408, -1.6803073, 5.280344, -1.6803073, 5.280344, -2.0579531, 4.5721235, -2.0579531, 4.5721235, -2.3586001, 3.8419728, -2.3586001, 3.8419728, -2.555562, 3.066117, -2.555562, 3.066117, -2.6221547, 2.2207804, -2.6221547, 2.2207804, -2.5316901, 1.2821894, -2.5316901, 1.2821894, -2.229959, 0.28377607, -2.229959, 0.28377607, -1.711573, -0.7272471, -1.711573, -0.7272471, -1.0230846, -1.753987, -1.0230846, -1.753987, -0.21104491, -2.7995508, -0.21104491, -2.7995508, 0.6779941, -3.8670444, 0.6779941, -3.8670444, 1.5974813, -4.9595757, 1.5974813, -4.9595757, 2.5008645, -6.0802507, 2.5008645, -6.0802507, 3.3415928, -7.2321777, 3.3415928, -7.2321777, 4.0731134, -8.418462, 4.0731134, -8.418462, 4.6488757, -9.64221, 4.6488757, -9.64221, 5.0223284, -10.906531, 5.0223284, -10.906531, 5.1469173, -12.21453, 5.1469173, -12.21453, 4.9924474, -13.563123, 4.9924474, -13.563123, 4.5904865, -14.946957, 4.5904865, -14.946957, 3.9871275, -16.365738, 3.9871275, -16.365738, 3.228467, -17.819172, 3.228467, -17.819172, 2.3605993, -19.306961, 2.3605993, -19.306961, 1.4296191, -20.828817, 1.4296191, -20.828817, 0.48162246, -22.38444, 0.48162246, -22.38444, -0.43729615, -23.97354, -0.43729615, -23.97354, -1.2810411, -25.595812, -1.2810411, -25.595812, -2.0035176, -27.250977, -2.0035176, -27.250977, -2.5586329, -28.938725, -2.5586329, -28.938725, -2.9002886, -30.658775, -2.9002886, -30.658775, -3.0389678, -32.50058, -3.0389678, -32.50058, -3.0316265, -34.5214, -3.0316265, -34.5214, -2.9018805, -36.67262, -2.9018805, -36.67262, -2.6733458, -38.90563, -2.6733458, -38.90563, -2.3696377, -41.171814, -2.3696377, -41.171814, -2.014372, -43.422577, -2.014372, -43.422577, -1.6311647, -45.60929, -1.6311647, -45.60929, -1.2436316, -47.68335, -1.2436316, -47.68335, -0.87538886, -49.59615, -0.87538886, -49.59615, -0.5500512, -51.299072, -0.5500512, -51.299072, -0.29123402, -52.743504, -0.29123402, -52.743504, -0.12255478, -53.880848)
+shader_parameter/road_segment_count = 60
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jap5i"]
+material = SubResource("ShaderMaterial_terrain_path")
+size = Vector2(400, 400)
+subdivide_width = 20
+subdivide_depth = 20
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jap5i"]
+height = 1.9801025
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_night"]
+sky_top_color = Color(0.01, 0.015, 0.03, 1)
+sky_horizon_color = Color(0.03, 0.04, 0.07, 1)
+ground_bottom_color = Color(0.005, 0.01, 0.015, 1)
+ground_horizon_color = Color(0.02, 0.03, 0.05, 1)
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_night"]
+sky_material = SubResource("ProceduralSkyMaterial_night")
+
+[sub_resource type="Environment" id="Environment_horror_night"]
+background_mode = 2
+sky = SubResource("Sky_night")
+ambient_light_source = 2
+ambient_light_color = Color(0.03, 0.04, 0.07, 1)
+ambient_light_energy = 0.25
+tonemap_mode = 2
+tonemap_white = 1.15
+glow_enabled = true
+glow_intensity = 0.32
+glow_bloom = 0.05
+glow_blend_mode = 0
+glow_hdr_threshold = 1.1
+fog_enabled = true
+fog_light_color = Color(0, 0, 0.078431375, 1)
+fog_density = 0.05
+fog_sky_affect = 0.5
+fog_depth_curve = 1.2
+fog_depth_begin = 4.0
+fog_depth_end = 35.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asphalt"]
+albedo_color = Color(0.18, 0.19, 0.2, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="BoxMesh_road_v1"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(6, 0.1, 49.600002)
+
+[sub_resource type="BoxMesh" id="BoxMesh_road_v2"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(6, 0.1, 45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_city_avenue"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(6, 0.1, 24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w3rk5"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(36, 0.1, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5mvff"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(36, 0.1, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_city_cross_street"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(36, 0.1, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bark"]
+albedo_color = Color(0.18, 0.13, 0.09, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_trunk"]
+material = SubResource("StandardMaterial3D_bark")
+top_radius = 0.16
+bottom_radius = 0.28
+height = 4.5
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_leaves"]
+albedo_color = Color(0.09, 0.15, 0.11, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_canopy_1"]
+material = SubResource("StandardMaterial3D_leaves")
+bottom_radius = 2.2
+height = 2.2
+radial_segments = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_canopy_2"]
+material = SubResource("StandardMaterial3D_leaves")
+top_radius = 0.3
+bottom_radius = 1.6
+radial_segments = 7
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_canopy_3"]
+material = SubResource("StandardMaterial3D_leaves")
+top_radius = 0.05
+bottom_radius = 1.0
+height = 1.8
+radial_segments = 7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stem"]
+albedo_color = Color(0.12, 0.22, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stem"]
+material = SubResource("StandardMaterial3D_stem")
+top_radius = 0.01
+bottom_radius = 0.015
+height = 0.35
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_petal"]
+albedo_color = Color(0.95, 0.88, 0.35, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_petal"]
+material = SubResource("StandardMaterial3D_petal")
+size = Vector3(0.06, 0.015, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_center"]
+albedo_color = Color(0.35, 0.2, 0.08, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_center"]
+material = SubResource("StandardMaterial3D_center")
+top_radius = 0.025
+bottom_radius = 0.025
+height = 0.025
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass_blade"]
+albedo_color = Color(0.14, 0.22, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_blade"]
+material = SubResource("StandardMaterial3D_grass_blade")
+size = Vector3(0.06, 0.45, 0.015)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
+albedo_color = Color(0.35, 0.35, 0.36, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock1"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.7, 0.45, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock2"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.5, 0.35, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rock3"]
+material = SubResource("StandardMaterial3D_rock")
+size = Vector3(0.35, 0.25, 0.35)
+
+[sub_resource type="Curve3D" id="Curve3D_hri7i"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0041280687, 0.18190575, 32.496002, 0, 0, 0, 0, 0, 0, 0.87763405, 0.0037020277, 11.620922, 0, 0, 0, 0, 0, 0, -2.5316901, 0.090566374, 1.2821894, 0, 0, 0, 0, 0, 0, 5.1469173, 0.091760635, -12.21453, 0, 0, 0, 0, 0, 0, -2.9002886, 0.09044075, -30.658775, 0, 0, 0, 0, 0, 0, -0.12255478, 0.072919846, -53.880848),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[node name="Paths" type="Node3D" parent="ForestSection" unique_id=2059507213]
+
+[node name="Main" type="Path3D" parent="ForestSection/Paths" unique_id=868421214]
+curve = SubResource("Curve3D_hri7i")
+
+[node name="DialogueUI" parent="." unique_id=987123457 instance=ExtResource("27_dialogue_ui")]
+
+[node name="FadeOverlay" parent="." unique_id=987123458 instance=ExtResource("28_fade_overlay")]
+
+[node name="StartSequenceManager" type="Node3D" parent="." unique_id=987123459]
+script = ExtResource("29_seq_mgr")
+player_path = NodePath("../Player")
+girlfriend_path = NodePath("../Props/GirlfriendNPC")
+dialogue_ui_path = NodePath("../DialogueUI")
+fade_overlay_path = NodePath("../FadeOverlay")

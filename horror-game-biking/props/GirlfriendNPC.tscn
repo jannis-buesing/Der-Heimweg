@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://dac1skwegylwy"]
+
+[ext_resource type="Script" path="res://props/girlfriend_npc.gd" id="1_gf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jacket"]
+albedo_color = Color(0.18, 0.32, 0.42, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pants"]
+albedo_color = Color(0.12, 0.14, 0.18, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skin"]
+albedo_color = Color(0.92, 0.78, 0.68, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hair"]
+albedo_color = Color(0.25, 0.16, 0.1, 1)
+roughness = 0.7
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_torso"]
+material = SubResource("StandardMaterial3D_jacket")
+radius = 0.28
+height = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_legs"]
+material = SubResource("StandardMaterial3D_pants")
+top_radius = 0.22
+bottom_radius = 0.18
+height = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_skin")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_hair"]
+material = SubResource("StandardMaterial3D_hair")
+size = Vector3(0.42, 0.35, 0.42)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_arm"]
+material = SubResource("StandardMaterial3D_jacket")
+radius = 0.08
+height = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_hand"]
+material = SubResource("StandardMaterial3D_skin")
+radius = 0.08
+
+[node name="GirlfriendNPC" type="Node3D"]
+script = ExtResource("1_gf")
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+mesh = SubResource("CapsuleMesh_torso")
+
+[node name="Legs" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.425, 0)
+mesh = SubResource("CylinderMesh_legs")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="Hair" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, -0.02)
+mesh = SubResource("BoxMesh_hair")
+
+[node name="LeftArm" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, -0.32, 1.15, 0)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="RightArmPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 1.4, 0)
+
+[node name="RightArm" type="MeshInstance3D" parent="RightArmPivot"]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0.05, -0.25, 0)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="RightHand" type="MeshInstance3D" parent="RightArmPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, -0.5, 0)
+mesh = SubResource("SphereMesh_hand")

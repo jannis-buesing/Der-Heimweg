@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b7v2nakpx3q8a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_white_paint"]
+albedo_color = Color(0.85, 0.85, 0.82, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_dash"]
+material = SubResource("StandardMaterial3D_white_paint")
+size = Vector3(0.18, 0.01, 2.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_line"]
+material = SubResource("StandardMaterial3D_white_paint")
+size = Vector3(0.14, 0.01, 10.0)
+
+[node name="RoadMarkings" type="Node3D"]
+
+[node name="CenterDash1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, -2.5)
+mesh = SubResource("BoxMesh_dash")
+
+[node name="CenterDash2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 2.5)
+mesh = SubResource("BoxMesh_dash")
+
+[node name="SideLineL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8, 0.015, 0)
+mesh = SubResource("BoxMesh_side_line")
+
+[node name="SideLineR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.015, 0)
+mesh = SubResource("BoxMesh_side_line")

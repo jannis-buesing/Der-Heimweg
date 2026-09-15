@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dm2x6y7vpnaka"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass_blade"]
+albedo_color = Color(0.14, 0.22, 0.12, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_blade"]
+material = SubResource("StandardMaterial3D_grass_blade")
+size = Vector3(0.06, 0.45, 0.015)
+
+[node name="GrassClump" type="Node3D"]
+
+[node name="Blade1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9659258, -0.258819, 0, 0.258819, 0.9659258, 0, 0, 0, 1, -0.05, 0.22, 0)
+mesh = SubResource("BoxMesh_blade")
+
+[node name="Blade2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.9659258, 0.258819, 0, -0.258819, 0.9659258, 0, 0, 0, 1, 0.05, 0.22, 0)
+mesh = SubResource("BoxMesh_blade")
+
+[node name="Blade3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 0, 0.22, -0.04)
+mesh = SubResource("BoxMesh_blade")
+
+[node name="Blade4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, -0.7071068, 0, 0.22, 0.04)
+mesh = SubResource("BoxMesh_blade")

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c5q3x7kpm8v2r"]
+
+[ext_resource type="Script" uid="uid://b0wljcvw533ej" path="res://props/grass_field.gd" id="1_grass"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass_default"]
+albedo_color = Color(0.12, 0.18, 0.11, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_grass"]
+material = SubResource("StandardMaterial3D_grass_default")
+size = Vector3(20, 0.2, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_grass"]
+size = Vector3(20, 0.2, 20)
+
+[node name="GrassField" type="StaticBody3D"]
+script = ExtResource("1_grass")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+mesh = SubResource("BoxMesh_grass")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_grass")

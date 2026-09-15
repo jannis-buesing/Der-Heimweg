@@ -1,0 +1,390 @@
+[gd_scene format=3 uid="uid://c6f2vhx8u3kqa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_frame"]
+albedo_color = Color(0.16862746, 0.22745098, 0.2509804, 1)
+metallic = 0.45
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_headtube"]
+material = SubResource("StandardMaterial3D_frame")
+top_radius = 0.024
+bottom_radius = 0.024
+height = 0.22
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rubber"]
+albedo_color = Color(0.09019608, 0.09019608, 0.09019608, 1)
+metallic = 0.05
+roughness = 0.85
+
+[sub_resource type="TorusMesh" id="TorusMesh_tire"]
+material = SubResource("StandardMaterial3D_rubber")
+inner_radius = 0.3
+outer_radius = 0.35
+rings = 20
+ring_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.68235296, 0.7019608, 0.7294118, 1)
+metallic = 0.85
+roughness = 0.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rim"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.31
+bottom_radius = 0.31
+height = 0.015
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hub"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.03
+bottom_radius = 0.03
+height = 0.12
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mudguard"]
+albedo_color = Color(0.12, 0.12, 0.13, 1)
+metallic = 0.3
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_mudguard_rear"]
+material = SubResource("StandardMaterial3D_mudguard")
+size = Vector3(0.08, 0.02, 0.55)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tube_seat"]
+material = SubResource("StandardMaterial3D_frame")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.68
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_seatpost"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.015
+bottom_radius = 0.015
+height = 0.16
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tube_medium"]
+material = SubResource("StandardMaterial3D_frame")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.86
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tube_thin"]
+material = SubResource("StandardMaterial3D_frame")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.86
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pp6at"]
+material = SubResource("StandardMaterial3D_frame")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.7
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_pedal"]
+material = SubResource("StandardMaterial3D_rubber")
+size = Vector3(0.08, 0.02, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_saddle"]
+albedo_color = Color(0.14117648, 0.10980392, 0.08627451, 1)
+roughness = 0.75
+
+[sub_resource type="BoxMesh" id="BoxMesh_saddle_rear"]
+material = SubResource("StandardMaterial3D_saddle")
+size = Vector3(0.18, 0.045, 0.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_saddle_front"]
+material = SubResource("StandardMaterial3D_saddle")
+size = Vector3(0.08, 0.04, 0.14)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_steercolumn"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.018
+bottom_radius = 0.018
+height = 0.32
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fork_crown"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.2557715
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_cigog"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.013183594
+bottom_radius = 0.013183594
+height = 0.09673523
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fork_blade"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.014
+bottom_radius = 0.014
+height = 0.6
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stem_fwd"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.016
+bottom_radius = 0.016
+height = 0.1
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bar_center"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.013
+bottom_radius = 0.013
+height = 0.22
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bar_riser"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.013
+bottom_radius = 0.013
+height = 0.15
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bar_outer"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.013
+bottom_radius = 0.013
+height = 0.16
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_grip"]
+material = SubResource("StandardMaterial3D_rubber")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.13
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lamp_bracket"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.008
+bottom_radius = 0.008
+height = 0.049648438
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lamp_body"]
+albedo_color = Color(0.12, 0.12, 0.14, 1)
+metallic = 0.65
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lamp_body"]
+material = SubResource("StandardMaterial3D_lamp_body")
+top_radius = 0.038
+bottom_radius = 0.028
+height = 0.1
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lamp_bezel"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.015
+radial_segments = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lamp_lens"]
+albedo_color = Color(0.96, 0.95, 0.9, 1)
+roughness = 0.1
+emission_enabled = true
+emission = Color(1, 0.96, 0.82, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lamp_lens"]
+material = SubResource("StandardMaterial3D_lamp_lens")
+top_radius = 0.036
+bottom_radius = 0.036
+height = 0.006
+radial_segments = 12
+
+[node name="Bike" type="Node3D" unique_id=298910088]
+
+[node name="Frame" type="Node3D" parent="." unique_id=1019160431]
+
+[node name="HeadTube" type="MeshInstance3D" parent="Frame" unique_id=1806989983]
+transform = Transform3D(1, 0, 0, 0, 0.9486833, 0.31622776, 0, -0.31622776, 0.9486833, 0, 0.88, -0.65)
+mesh = SubResource("CylinderMesh_headtube")
+
+[node name="RearTire" type="MeshInstance3D" parent="Frame" unique_id=1891839947]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, 0.85)
+mesh = SubResource("TorusMesh_tire")
+
+[node name="RearRim" type="MeshInstance3D" parent="Frame" unique_id=616237880]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, 0.85)
+mesh = SubResource("CylinderMesh_rim")
+
+[node name="RearHub" type="MeshInstance3D" parent="Frame" unique_id=140578373]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, 0.85)
+mesh = SubResource("CylinderMesh_hub")
+
+[node name="RearMudguard" type="MeshInstance3D" parent="Frame" unique_id=842103443]
+transform = Transform3D(1, 0, 0, 0, 0.9925461, -0.121869385, 0, 0.121869385, 0.9925461, 0, 0.73859596, 0.92171794)
+mesh = SubResource("BoxMesh_mudguard_rear")
+
+[node name="SeatTube" type="MeshInstance3D" parent="Frame" unique_id=52448355]
+transform = Transform3D(1, 0, 0, 0, 0.9486833, -0.31622776, 0, 0.31622776, 0.9486833, 0, 0.64, 0.1)
+mesh = SubResource("CylinderMesh_tube_seat")
+
+[node name="SeatPost" type="MeshInstance3D" parent="Frame" unique_id=1884350233]
+transform = Transform3D(1, 0, 0, 0, 0.9486833, -0.31622776, 0, 0.31622776, 0.9486833, 0, 0.93, 0.197)
+mesh = SubResource("CylinderMesh_seatpost")
+
+[node name="TopTube" type="MeshInstance3D" parent="Frame" unique_id=1391677431]
+transform = Transform3D(1, 0, 0, 0, 0.0543, -0.9985, 0, 0.9985, 0.0543, 0, 0.87, -0.23)
+mesh = SubResource("CylinderMesh_tube_medium")
+
+[node name="DownTube" type="MeshInstance3D" parent="Frame" unique_id=1174328947]
+transform = Transform3D(1, 0, 0, 0, 0.6318536, 0.7750868, 0, -0.7750868, 0.6318536, 0, 0.6, -0.325)
+mesh = SubResource("CylinderMesh_tube_medium")
+
+[node name="ChainStayL" type="MeshInstance3D" parent="Frame" unique_id=1799217819]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.045, 0.35, 0.425)
+mesh = SubResource("CylinderMesh_tube_thin")
+
+[node name="ChainStayR" type="MeshInstance3D" parent="Frame" unique_id=1562224041]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.045, 0.35, 0.425)
+mesh = SubResource("CylinderMesh_tube_thin")
+
+[node name="SeatStayL" type="MeshInstance3D" parent="Frame" unique_id=1325581373]
+transform = Transform3D(1, 0, 0, 0, 0.6217436, -0.7832207, 0, 0.7832207, 0.6217436, -0.045, 0.5673492, 0.515)
+mesh = SubResource("CylinderMesh_pp6at")
+
+[node name="SeatStayR" type="MeshInstance3D" parent="Frame" unique_id=1589709770]
+transform = Transform3D(1, 0, 0, 0, 0.6217436, -0.7832207, 0, 0.7832207, 0.6217436, 0.045, 0.5673492, 0.515)
+mesh = SubResource("CylinderMesh_pp6at")
+
+[node name="BottomBracket" type="MeshInstance3D" parent="Frame" unique_id=129231393]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, 0)
+mesh = SubResource("CylinderMesh_hub")
+
+[node name="PedalL" type="MeshInstance3D" parent="Frame" unique_id=198991979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11, 0.35, -0.07)
+mesh = SubResource("BoxMesh_pedal")
+
+[node name="PedalR" type="MeshInstance3D" parent="Frame" unique_id=176113866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.11, 0.35, 0.07)
+mesh = SubResource("BoxMesh_pedal")
+
+[node name="SaddleRear" type="MeshInstance3D" parent="Frame" unique_id=2029363731]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 0.25)
+mesh = SubResource("BoxMesh_saddle_rear")
+
+[node name="SaddleFront" type="MeshInstance3D" parent="Frame" unique_id=335002738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 0.11)
+mesh = SubResource("BoxMesh_saddle_front")
+
+[node name="SteeringAssembly" type="Node3D" parent="." unique_id=665585509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.65)
+
+[node name="SteerColumn" type="MeshInstance3D" parent="SteeringAssembly" unique_id=944501021]
+transform = Transform3D(1, 0, 0, 0, 0.9486833, 0.31622776, 0, -0.31622776, 0.9486833, 0, 0.9, 0)
+mesh = SubResource("CylinderMesh_steercolumn")
+
+[node name="ForkCrown" type="MeshInstance3D" parent="SteeringAssembly" unique_id=2115233277]
+transform = Transform3D(1.9106855e-15, 4.371139e-08, 1, 1, -4.371139e-08, 0, 4.371139e-08, 1, -4.371139e-08, -3.185937e-09, 0.76233554, -0.08799803)
+mesh = SubResource("CylinderMesh_fork_crown")
+
+[node name="ForkCrownConnect" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1963997922]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.0026579797, 0.77205056, -0.20353216)
+mesh = SubResource("CylinderMesh_cigog")
+
+[node name="ForkBladeL" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1882066906]
+transform = Transform3D(1, 0, 0, 0, 0.9360814, 0.35178652, 0, -0.35178652, 0.9360814, -0.045, 0.5208751, -0.100934565)
+mesh = SubResource("CylinderMesh_fork_blade")
+
+[node name="ForkBladeR" type="MeshInstance3D" parent="SteeringAssembly" unique_id=78145066]
+transform = Transform3D(1, 0, 0, 0, 0.9360814, 0.35178652, 0, -0.35178652, 0.9360814, 0.045, 0.5208751, -0.100934565)
+mesh = SubResource("CylinderMesh_fork_blade")
+
+[node name="FrontTire" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1159009008]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, -0.2)
+mesh = SubResource("TorusMesh_tire")
+
+[node name="FrontRim" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1642023840]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, -0.2)
+mesh = SubResource("CylinderMesh_rim")
+
+[node name="FrontHub" type="MeshInstance3D" parent="SteeringAssembly" unique_id=280751987]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.35, -0.2)
+mesh = SubResource("CylinderMesh_hub")
+
+[node name="StemExtension" type="MeshInstance3D" parent="SteeringAssembly" unique_id=110307084]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.9659258, 0, -0.9659258, 0.258819, 0, 1.0589352, -0.0880571)
+mesh = SubResource("CylinderMesh_stem_fwd")
+
+[node name="BarCenter" type="MeshInstance3D" parent="SteeringAssembly" unique_id=2008030261]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 1.0789351, -0.12805712)
+mesh = SubResource("CylinderMesh_bar_center")
+
+[node name="BarRiserL" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1012656977]
+transform = Transform3D(0.8142742, -0.5809058, 0, 0.46386042, 0.6504087, -0.60181457, 0.34954387, 0.49011806, 0.798635, -0.155, 1.1239351, -0.09105712)
+mesh = SubResource("CylinderMesh_bar_riser")
+
+[node name="BarRiserR" type="MeshInstance3D" parent="SteeringAssembly" unique_id=674566806]
+transform = Transform3D(0.8142742, 0.5809058, 0, -0.46386042, 0.6504087, -0.60181457, -0.34954387, 0.49011806, 0.798635, 0.15451455, 1.1239351, -0.0915395)
+mesh = SubResource("CylinderMesh_bar_riser")
+
+[node name="BarOuterL" type="MeshInstance3D" parent="SteeringAssembly" unique_id=78195266]
+transform = Transform3D(-4.37114e-08, -1, 0, 0.9659258, -4.222196e-08, 0.258819, -0.258819, 1.131334e-08, 0.9659258, -0.27, 1.1689351, -0.05805713)
+mesh = SubResource("CylinderMesh_bar_outer")
+
+[node name="BarOuterR" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1911701479]
+transform = Transform3D(-4.37114e-08, -1, 0, 0.9659258, -4.222196e-08, -0.258819, 0.258819, -1.131334e-08, 0.9659258, 0.27, 1.1689351, -0.05805713)
+mesh = SubResource("CylinderMesh_bar_outer")
+
+[node name="GripL" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1067193528]
+transform = Transform3D(-4.37114e-08, -1, 0, 0.9659258, -4.222196e-08, 0.258819, -0.258819, 1.131334e-08, 0.9659258, -0.27, 1.1689351, -0.05805713)
+mesh = SubResource("CylinderMesh_grip")
+
+[node name="GripR" type="MeshInstance3D" parent="SteeringAssembly" unique_id=1261120886]
+transform = Transform3D(-4.37114e-08, -1, 0, 0.9659258, -4.222196e-08, -0.258819, 0.258819, -1.131334e-08, 0.9659258, 0.27, 1.1689351, -0.05805713)
+mesh = SubResource("CylinderMesh_grip")
+
+[node name="HeadlightMount" type="Marker3D" parent="SteeringAssembly" unique_id=1589611860]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, -0.1)
+
+[node name="Lamp" type="Node3D" parent="SteeringAssembly" unique_id=1015343251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06, -0.17)
+
+[node name="LampBracket" type="MeshInstance3D" parent="SteeringAssembly/Lamp" unique_id=270710291]
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 0.021242023, 0.041083395)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_lamp_bracket")
+
+[node name="LampBody" type="MeshInstance3D" parent="SteeringAssembly/Lamp" unique_id=1341134639]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.011044741, -0.014691412)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_lamp_body")
+
+[node name="LampBezel" type="MeshInstance3D" parent="SteeringAssembly/Lamp" unique_id=2062888460]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.011044741, -0.06269145)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_lamp_bezel")
+
+[node name="LampLens" type="MeshInstance3D" parent="SteeringAssembly/Lamp" unique_id=1387755202]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.011044741, -0.067691445)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_lamp_lens")
+
+[node name="Headlight" type="SpotLight3D" parent="SteeringAssembly/Lamp" unique_id=43089658]
+transform = Transform3D(1, 0, 0, 0, 0.9986295, 0.052335955, 0, -0.052335955, 0.9986295, 0, 0.011044741, -0.074691415)
+light_color = Color(1, 0.9607843, 0.87058824, 1)
+light_energy = 4.5
+shadow_enabled = true
+shadow_reverse_cull_face = true
+shadow_bias = 0.005
+shadow_normal_bias = 0.5
+shadow_blur = 1.5
+spot_range = 35.0
+spot_attenuation = 1.0
+spot_angle = 42.0
+spot_angle_attenuation = 0.6

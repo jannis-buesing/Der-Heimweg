@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://d3m7p2kj8vw9n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_white"]
+albedo_color = Color(0.88, 0.88, 0.88, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_black"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_reflector"]
+albedo_color = Color(0.95, 0.95, 0.95, 1)
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.9, 0.9, 0.9, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_post"]
+material = SubResource("StandardMaterial3D_white")
+size = Vector3(0.12, 1.0, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cap"]
+material = SubResource("StandardMaterial3D_black")
+size = Vector3(0.125, 0.2, 0.085)
+
+[sub_resource type="BoxMesh" id="BoxMesh_reflector"]
+material = SubResource("StandardMaterial3D_reflector")
+size = Vector3(0.04, 0.12, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_post"]
+size = Vector3(0.14, 1.0, 0.1)
+
+[node name="GuidePost" type="StaticBody3D"]
+
+[node name="Post" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_post")
+
+[node name="BlackCap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("BoxMesh_cap")
+
+[node name="ReflectorFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.044)
+mesh = SubResource("BoxMesh_reflector")
+
+[node name="ReflectorBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -0.044)
+mesh = SubResource("BoxMesh_reflector")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_post")

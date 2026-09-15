@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://df6y7k3vpnawa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal_frame"]
+albedo_color = Color(0.18, 0.22, 0.26, 1)
+metallic = 0.8
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_roof"]
+material = SubResource("StandardMaterial3D_metal_frame")
+size = Vector3(3.2, 0.15, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0.3, 0.4, 0.45, 0.6)
+roughness = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_wall"]
+material = SubResource("StandardMaterial3D_glass")
+size = Vector3(3, 2.3, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_wall"]
+material = SubResource("StandardMaterial3D_glass")
+size = Vector3(0.05, 2.3, 1.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+material = SubResource("StandardMaterial3D_metal_frame")
+size = Vector3(0.08, 2.5, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood_bench"]
+albedo_color = Color(0.32, 0.22, 0.14, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench"]
+material = SubResource("StandardMaterial3D_wood_bench")
+size = Vector3(2.4, 0.06, 0.35)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sign_h"]
+albedo_color = Color(0.9, 0.85, 0.1, 1)
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_h_sign"]
+material = SubResource("StandardMaterial3D_sign_h")
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.02
+radial_segments = 12
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_shelter"]
+size = Vector3(3.3, 2.6, 1.9)
+
+[node name="BusStop" type="StaticBody3D" unique_id=1363401184]
+
+[node name="Roof" type="MeshInstance3D" parent="." unique_id=524092343]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, 0)
+mesh = SubResource("BoxMesh_roof")
+
+[node name="BackWall" type="MeshInstance3D" parent="." unique_id=82781898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0.8)
+mesh = SubResource("BoxMesh_back_wall")
+
+[node name="SideWallL" type="MeshInstance3D" parent="." unique_id=206459854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.25, 0.05)
+mesh = SubResource("BoxMesh_side_wall")
+
+[node name="SideWallR" type="MeshInstance3D" parent="." unique_id=1993247176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.25, 0.05)
+mesh = SubResource("BoxMesh_side_wall")
+
+[node name="PillarFL" type="MeshInstance3D" parent="." unique_id=1688166214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1.25, -0.75)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="PillarFR" type="MeshInstance3D" parent="." unique_id=543210011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 1.25, -0.75)
+mesh = SubResource("BoxMesh_pillar")
+
+[node name="Bench" type="MeshInstance3D" parent="." unique_id=69352612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0.55)
+mesh = SubResource("BoxMesh_bench")
+
+[node name="HSign" type="MeshInstance3D" parent="." unique_id=1936549571]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 1.8, 2.2, -0.8)
+mesh = SubResource("CylinderMesh_h_sign")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1000314393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+shape = SubResource("BoxShape3D_shelter")

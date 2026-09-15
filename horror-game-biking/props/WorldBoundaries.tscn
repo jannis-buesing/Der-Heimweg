@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://bf2jytxnqldke"]
+
+[ext_resource type="Script" path="res://props/world_boundaries.gd" id="1_wbounds"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_south"]
+size = Vector3(80, 20, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_start_village_side"]
+size = Vector3(4, 20, 45)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_transition_wall"]
+size = Vector3(17, 20, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_forest_side"]
+size = Vector3(4, 20, 166)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_end_village_side"]
+size = Vector3(4, 20, 52)
+
+[node name="WorldBoundaries" type="Node3D"]
+script = ExtResource("1_wbounds")
+
+[node name="NorthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 78)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthWall"]
+shape = SubResource("BoxShape3D_north_south")
+
+[node name="SouthWall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -185)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthWall"]
+shape = SubResource("BoxShape3D_north_south")
+
+[node name="StartVillageLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 10, 55.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartVillageLeft"]
+shape = SubResource("BoxShape3D_start_village_side")
+
+[node name="StartVillageRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 10, 55.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartVillageRight"]
+shape = SubResource("BoxShape3D_start_village_side")
+
+[node name="StartToForestTransitionLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5, 10, 33)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartToForestTransitionLeft"]
+shape = SubResource("BoxShape3D_transition_wall")
+
+[node name="StartToForestTransitionRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, 10, 33)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StartToForestTransitionRight"]
+shape = SubResource("BoxShape3D_transition_wall")
+
+[node name="ForestLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 10, -50)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForestLeft"]
+shape = SubResource("BoxShape3D_forest_side")
+
+[node name="ForestRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 10, -50)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForestRight"]
+shape = SubResource("BoxShape3D_forest_side")
+
+[node name="ForestToEndTransitionLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.5, 10, -133)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForestToEndTransitionLeft"]
+shape = SubResource("BoxShape3D_transition_wall")
+
+[node name="ForestToEndTransitionRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, 10, -133)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForestToEndTransitionRight"]
+shape = SubResource("BoxShape3D_transition_wall")
+
+[node name="EndVillageLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 10, -159)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EndVillageLeft"]
+shape = SubResource("BoxShape3D_end_village_side")
+
+[node name="EndVillageRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 10, -159)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EndVillageRight"]
+shape = SubResource("BoxShape3D_end_village_side")

@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://c8l7k5qjm4v2n"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.18, 0.19, 0.21, 1)
+metallic = 0.7
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lamp"]
+albedo_color = Color(1, 0.9, 0.65, 1)
+roughness = 0.3
+emission_enabled = true
+emission = Color(1, 0.82, 0.5, 1)
+emission_energy_multiplier = 3.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pole"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.05
+bottom_radius = 0.09
+height = 5.0
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_arm"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 1.4
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="BoxMesh_housing"]
+material = SubResource("StandardMaterial3D_metal")
+size = Vector3(0.28, 0.15, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bulb"]
+material = SubResource("StandardMaterial3D_lamp")
+size = Vector3(0.2, 0.02, 0.35)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pole"]
+height = 5.0
+radius = 0.15
+
+[node name="StreetLight" type="StaticBody3D"]
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+mesh = SubResource("CylinderMesh_pole")
+
+[node name="Arm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.4226183, 0.9063078, 0, -0.9063078, 0.4226183, 0, 5.0, -0.55)
+mesh = SubResource("CylinderMesh_arm")
+
+[node name="Housing" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.25, -1.2)
+mesh = SubResource("BoxMesh_housing")
+
+[node name="Bulb" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.17, -1.2)
+mesh = SubResource("BoxMesh_bulb")
+
+[node name="Light" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1736482, 0.9848077, 0, -0.9848077, 0.1736482, 0, 5.1, -1.2)
+light_color = Color(1, 0.82, 0.48, 1)
+light_energy = 5.0
+shadow_enabled = true
+shadow_reverse_cull_face = true
+shadow_bias = 0.01
+shadow_normal_bias = 0.5
+shadow_blur = 1.5
+spot_range = 15.0
+spot_attenuation = 0.75
+spot_angle = 60.0
+spot_angle_attenuation = 0.5
+
+[node name="AmbientGlow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, -1.2)
+light_color = Color(1, 0.85, 0.55, 1)
+light_energy = 1.2
+omni_range = 7.0
+omni_attenuation = 1.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+shape = SubResource("CylinderShape3D_pole")

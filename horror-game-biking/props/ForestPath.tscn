@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c1x8v7kpm4ran"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirt"]
+albedo_color = Color(0.22, 0.16, 0.11, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dirt_edge"]
+albedo_color = Color(0.16, 0.12, 0.08, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="BoxMesh_path_main"]
+material = SubResource("StandardMaterial3D_dirt")
+size = Vector3(4.5, 0.08, 6.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_path_edge"]
+material = SubResource("StandardMaterial3D_dirt_edge")
+size = Vector3(0.6, 0.06, 6.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_path"]
+size = Vector3(5.2, 0.08, 6.0)
+
+[node name="ForestPath" type="StaticBody3D"]
+
+[node name="MainDirt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+mesh = SubResource("BoxMesh_path_main")
+
+[node name="EdgeL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, -0.03, 0)
+mesh = SubResource("BoxMesh_path_edge")
+
+[node name="EdgeR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, -0.03, 0)
+mesh = SubResource("BoxMesh_path_edge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+shape = SubResource("BoxShape3D_path")

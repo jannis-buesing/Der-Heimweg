@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://df8k3wapm7q2a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_post"]
+albedo_color = Color(0.28, 0.2, 0.14, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box"]
+albedo_color = Color(0.18, 0.22, 0.28, 1)
+metallic = 0.4
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flag"]
+albedo_color = Color(0.8, 0.15, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_post"]
+material = SubResource("StandardMaterial3D_post")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 1.1
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_box"]
+material = SubResource("StandardMaterial3D_box")
+size = Vector3(0.24, 0.22, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flag"]
+material = SubResource("StandardMaterial3D_flag")
+size = Vector3(0.02, 0.12, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mailbox"]
+size = Vector3(0.28, 1.25, 0.48)
+
+[node name="Mailbox" type="StaticBody3D"]
+
+[node name="Post" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("CylinderMesh_post")
+
+[node name="Box" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.05)
+mesh = SubResource("BoxMesh_box")
+
+[node name="Flag" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 1.2, 0.1)
+mesh = SubResource("BoxMesh_flag")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.625, 0)
+shape = SubResource("BoxShape3D_mailbox")
