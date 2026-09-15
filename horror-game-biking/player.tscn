@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://tovicvpv22na"]
+
+[ext_resource type="Script" uid="uid://csbc6if2etbwf" path="res://player.gd" id="1_i3pqv"]
+[ext_resource type="PackedScene" uid="uid://c6f2vhx8u3kqa" path="res://Bike.tscn" id="2_hqtel"]
+[ext_resource type="Script" uid="uid://c5mgfneyh8ne4" path="res://interaction_manager.gd" id="3_sweqy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jap5i"]
+height = 1.9801025
+
+[node name="Player" type="CharacterBody3D" unique_id=1382133262]
+script = ExtResource("1_i3pqv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1786987626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.990051, 0)
+shape = SubResource("CapsuleShape3D_jap5i")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1978674752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4877144, -0.117378235)
+current = true
+
+[node name="Bike" parent="." unique_id=298910088 instance=ExtResource("2_hqtel")]
+
+[node name="InteractionManager" type="Node3D" parent="." unique_id=337641846]
+script = ExtResource("3_sweqy")
+
+[node name="PromptLabel3D" type="Label3D" parent="InteractionManager" unique_id=48811086]
+visible = false

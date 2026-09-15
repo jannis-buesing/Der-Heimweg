@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://c5dialogui8829"]
+[gd_scene format=3 uid="uid://bqbiuahke7d45"]
 
-[ext_resource type="Script" path="res://ui/dialogue_ui.gd" id="1_dialogue"]
+[ext_resource type="Script" uid="uid://bbo0y8l5io6bd" path="res://ui/dialogue_ui.gd" id="1_dialogue"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
 bg_color = Color(0.04, 0.05, 0.07, 0.92)
@@ -13,8 +13,8 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-shadow_size = 8
 shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_speaker_bg"]
 bg_color = Color(0.12, 0.15, 0.2, 0.8)
@@ -27,11 +27,11 @@ expand_margin_top = 3.0
 expand_margin_right = 8.0
 expand_margin_bottom = 3.0
 
-[node name="DialogueUI" type="CanvasLayer"]
+[node name="DialogueUI" type="CanvasLayer" unique_id=1208793300]
 layer = 10
 script = ExtResource("1_dialogue")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=508802853]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -45,28 +45,29 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=322368709]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 16
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1889760444]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="HeaderBox" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HeaderBox" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=797892884]
 layout_mode = 2
 
-[node name="SpeakerLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox"]
+[node name="SpeakerLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HeaderBox" unique_id=317283352]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.82, 0.62, 1)
 theme_override_font_sizes/font_size = 17
 theme_override_styles/normal = SubResource("StyleBoxFlat_speaker_bg")
 text = "MARIEKE"
 
-[node name="TextLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TextLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1649929918]
+custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.92, 0.94, 0.96, 1)
@@ -74,7 +75,7 @@ theme_override_font_sizes/font_size = 16
 text = "Danke, dass du mich nach Hause begleitet hast."
 autowrap_mode = 3
 
-[node name="PromptLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PromptLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=665403826]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_colors/font_color = Color(0.65, 0.72, 0.8, 1)

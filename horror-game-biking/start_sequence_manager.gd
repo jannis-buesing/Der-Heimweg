@@ -26,23 +26,52 @@ var current_state: SequenceState = SequenceState.START
 var current_line_idx: int = 0
 
 var dialogue_lines: Array = [
-	{"speaker": "Marieke", "text": "Danke, dass du mich nach Hause begleitet hast."},
-	{"speaker": "Marieke", "text": "Die Straße wird nach dem Dorf echt dunkel... Fahr bitte vorsichtig."},
 	{"speaker": "Ich", "text": "Mach ich. Danke dir, bis morgen!"},
 	{"speaker": "Marieke", "text": "Pass auf dich auf! Sag Bescheid, wenn du angekommen bist."}
 ]
 
-func _ready() -> void:
-	if player_path:
-		player = get_node_or_null(player_path)
-	if girlfriend_path:
-		girlfriend = get_node_or_null(girlfriend_path)
-	if dialogue_ui_path:
-		dialogue_ui = get_node_or_null(dialogue_ui_path)
-	if fade_overlay_path:
-		fade_overlay = get_node_or_null(fade_overlay_path)
+	# Hilfsfunktion zum Auflisten der Kinder
+func _list_nodes(node: Node, indent: String = ""):
+	print(indent, node.name, " (", node.get_class(), ")")
+	for child in node.get_children():
+		_list_nodes(child, indent + "  ")
 
-	if dialogue_ui and dialogue_ui.has_signal("advance_requested"):
+func _ready() -> void:
+	print("LADE SZENE: ", get_tree().current_scene.scene_file_path)
+	
+	# Warten, bis Szene bereit
+	await get_tree().process_frame
+	
+	var root = get_tree().current_scene
+	print("DEBUG: Root-Knoten ist: ", root.name)
+	
+	print("DEBUG: Gesamte Knoten-Struktur:")
+	_list_nodes(root)
+	
+	# Direkte Suche
+	if root.has_node("Player"):
+		player = root.get_node("Player")
+	else:
+		# Suche in der gesamten Hierarchie, falls die Struktur anders ist
+		player = root.find_child("Player", true, false)
+		
+	if root.has_node("Props/GirlfriendNPC"):
+		girlfriend = root.get_node("Props/GirlfriendNPC")
+	else:
+		girlfriend = root.find_child("GirlfriendNPC", true, false)
+		
+	if root.has_node("DialogueUI"):
+		dialogue_ui = root.get_node("DialogueUI")
+		
+	if root.has_node("FadeOverlay"):
+		fade_overlay = root.get_node("FadeOverlay")
+	else:
+		fade_overlay = root.find_child("FadeOverlay", true, false)
+	
+	print("DEBUG: Gefunden -> Player: ", player, ", Girlfriend: ", girlfriend)
+
+	# Signal-Verbindung sicherstellen
+	if dialogue_ui and not dialogue_ui.advance_requested.is_connected(_on_dialogue_advance):
 		dialogue_ui.advance_requested.connect(_on_dialogue_advance)
 
 	call_deferred("_start_sequence")
@@ -56,18 +85,25 @@ func _calc_angles_to(from_pos: Vector3, target_pos: Vector3) -> Dictionary:
 
 
 func _start_sequence() -> void:
-	if not player:
+	print("Startsequence gestartet. Player: ", player, " UI: ", dialogue_ui)
+	
+	if not player or not dialogue_ui:
 		return
+
 	
 	# 1. Spieler-Steuerung deaktivieren
+	print("DEBUG: Player in _start_sequence: ", player)
+	if not player:
+		print("DEBUG: ABBRUCH in _start_sequence: Player ist null!")
+		return
 	player.controls_enabled = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	# Fahrrad auf Fußweg ausblenden
+	# Fahrrad auf FuÃŸweg ausblenden
 	if player.has_method("set_bike_visible"):
 		player.set_bike_visible(false)
 
-	# 2. Fahrradlicht am Anfang auf Fußweg AUSschalten
+	# 2. Fahrradlicht am Anfang auf FuÃŸweg AUSschalten
 	if "is_light_on" in player:
 		player.is_light_on = false
 		if player.has_method("_apply_light_state"):
@@ -78,7 +114,7 @@ func _start_sequence() -> void:
 	if girlfriend:
 		gf_pos = girlfriend.global_position
 
-	# 4. Spieler zu Fuß vor Marieke platzieren
+	# 4. Spieler zu FuÃŸ vor Marieke platzieren
 	player.global_position = gf_pos - Vector3(1.6, 0.0, 0.0) # 1.6m links von Marieke
 	player.rotation.y = deg_to_rad(-90.0) # blickt nach +X zu Marieke
 
@@ -111,16 +147,25 @@ func _on_dialogue_advance() -> void:
 
 
 func _on_dialog_1_finished() -> void:
+	print("DEBUG: Sequenz: Dialog 1 beendet, starte Fade-Out...")
 	if dialogue_ui:
 		dialogue_ui.hide_dialogue()
 	
 	current_state = SequenceState.FADE_OUT
 	if fade_overlay:
-		await fade_overlay.fade_out(1.0)
+		print("DEBUG: FÃ¼hre Fade-Out aus...")
+		# Hier stellen wir sicher, dass fade_out aufgerufen wird
+		if fade_overlay.has_method("fade_out"):
+			await fade_overlay.fade_out(1.0)
+		else:
+			print("DEBUG: FEHLER: fade_overlay hat kein fade_out()!")
+		print("DEBUG: Fade-Out abgeschlossen.")
 	else:
+		print("DEBUG: WARNUNG: FadeOverlay fehlt!")
 		await get_tree().create_timer(1.0).timeout
 
 	_setup_bike_position()
+
 
 
 func _setup_bike_position() -> void:
