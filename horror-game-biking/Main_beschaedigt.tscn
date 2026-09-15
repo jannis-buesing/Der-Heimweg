@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://d2hvrsmd8fj3i"]
+
+[ext_resource type="PackedScene" uid="uid://bqbiuahke7d45" path="res://ui/DialogueUI.tscn" id="1_14q7n"]
+[ext_resource type="PackedScene" uid="uid://cxnwnk25dyl63" path="res://ui/FadeOverlay.tscn" id="2_buao6"]
+[ext_resource type="Script" uid="uid://m6t4luvdoefc" path="res://start_sequence_manager.gd" id="3_jxpoo"]
+
+[sub_resource type="Curve3D" id="Curve3D_hri7i"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0.0041280687, 0.18190575, 32.496002, 0, 0, 0, 0, 0, 0, 0.87763405, 0.0037020277, 11.620922, 0, 0, 0, 0, 0, 0, -2.5316901, 0.090566374, 1.2821894, 0, 0, 0, 0, 0, 0, 5.1469173, 0.091760635, -12.21453, 0, 0, 0, 0, 0, 0, -2.9002886, 0.09044075, -30.658775, 0, 0, 0, 0, 0, 0, -0.12255478, 0.072919846, -53.880848),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[node name="Main" type="Node3D" unique_id=338275107]
+
+[node name="ForestSection" type="Node3D" parent="." unique_id=191195835]
+
+[node name="Paths" type="Node3D" parent="ForestSection" unique_id=2059507213]
+
+[node name="Main" type="Path3D" parent="ForestSection/Paths" unique_id=868421214]
+curve = SubResource("Curve3D_hri7i")
+
+[node name="DialogueUI" parent="." unique_id=987123457 instance=ExtResource("1_14q7n")]
+
+[node name="FadeOverlay" parent="." unique_id=987123458 instance=ExtResource("2_buao6")]
+
+[node name="StartSequenceManager" type="Node3D" parent="." unique_id=987123459]
+script = ExtResource("3_jxpoo")
+player_path = NodePath("../Player")
+girlfriend_path = NodePath("../Props/GirlfriendNPC")
+dialogue_ui_path = NodePath("../DialogueUI")
+fade_overlay_path = NodePath("../FadeOverlay")
+
+
+lässt sich öffnen, ist aber nur startSequence teilweise und ForestSection
