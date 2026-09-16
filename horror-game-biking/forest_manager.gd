@@ -819,6 +819,79 @@ func build_chunk_type(
 			multi_mesh.set_instance_transform(i, transform)
 
 
+		if label == "Trees":
+			var static_body := StaticBody3D.new()
+			static_body.name = "%d_%d_Collision" % [chunk.x, chunk.y]
+			container.add_child(static_body)
+			static_body.set_meta("wald_manager_chunk", chunk)
+
+			if Engine.is_editor_hint():
+				static_body.owner = get_tree().edited_scene_root
+
+			for i in range(instances.size()):
+				var entry: Dictionary = instances[i]
+				var pos: Vector2 = entry["position"]
+				var scale_factor: float = entry["scale_factor"]
+				var rot: float = entry["rotation"]
+
+				var prop_transform := Transform3D(
+					Basis(Vector3.UP, rot).scaled(Vector3.ONE * scale_factor),
+					Vector3(pos.x, 0.0, pos.y)
+				)
+				var world_transform := global_transform * prop_transform
+				var local_body_transform := static_body.global_transform.affine_inverse() * world_transform
+
+				var collision_shape := CollisionShape3D.new()
+				var cylinder := CylinderShape3D.new()
+				cylinder.radius = 0.3 * scale_factor * 0.90
+				cylinder.height = 4.5 * scale_factor
+				collision_shape.shape = cylinder
+				collision_shape.transform = local_body_transform.translated(Vector3(0.0, (4.5 * scale_factor) * 0.5, 0.0))
+				static_body.add_child(collision_shape)
+
+				if Engine.is_editor_hint():
+					collision_shape.owner = get_tree().edited_scene_root
+
+
+			# Für jeden aktiven Chunk eine dichte Nebelwand / Barriere am äußeren Rand erzeugen
+			var world_pos := chunk_to_world(chunk)
+			var half_size := chunk_size * 0.5
+
+			# Physik-Barriere als Außenbegrenzung
+			var boundary_body := StaticBody3D.new()
+			boundary_body.name = "%d_%d_BoundaryWall" % [chunk.x, chunk.y]
+			container.add_child(boundary_body)
+			boundary_body.set_meta("wald_manager_chunk", chunk)
+
+			if Engine.is_editor_hint():
+				boundary_body.owner = get_tree().edited_scene_root
+
+			var box_shape := CollisionShape3D.new()
+			var box := BoxShape3D.new()
+			box.size = Vector3(chunk_size, 10.0, 1.0)
+			box_shape.shape = box
+			box_shape.position = Vector3(half_size, 5.0, half_size)
+			boundary_body.add_child(box_shape)
+
+			if Engine.is_editor_hint():
+				box_shape.owner = get_tree().edited_scene_root
+
+			# Visueller FogVolume-Block als undurchdringliche Nebelwand
+			var fv := FogVolume.new()
+			fv.name = "%d_%d_FogWall" % [chunk.x, chunk.y]
+			var fv_material := FogMaterial.new()
+			fv_material.density = 12.0
+			fv_material.albedo = Color(0.0, 0.0, 0.0, 1)
+			fv.material = fv_material
+			fv.size = Vector3(chunk_size, 8.0, 2.0)
+			fv.position = Vector3(half_size, 4.0, half_size)
+			container.add_child(fv)
+			fv.set_meta("wald_manager_chunk", chunk)
+
+			if Engine.is_editor_hint():
+				fv.owner = get_tree().edited_scene_root
+
+
 # ============================================================
 # ALLE MESHES EINER SCENE
 # ============================================================
@@ -895,6 +968,9 @@ func collect_meshes(
 			local_transform,
 			false
 		)
+		if child is MultiMeshInstance3D or child is StaticBody3D or child is FogVolume:
+			child.free()
+
 
 
 func clear_generated_chunks() -> void:
@@ -907,10 +983,7 @@ func clear_generated_chunks() -> void:
 		if container == null:
 			continue
 		for child in container.get_children():
-			# Die drei Container sind ausschliesslich fuer diese generierte
-			# Vegetation vorgesehen. Das schliesst auch alte, bereits in Main.tscn
-			# gespeicherte Versionen ohne Meta-Daten ein.
-			if child is MultiMeshInstance3D:
+			if child is MultiMeshInstance3D or child is StaticBody3D:
 				child.free()
 
 

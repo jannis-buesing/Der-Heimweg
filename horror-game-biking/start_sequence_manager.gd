@@ -43,10 +43,6 @@ func _ready() -> void:
 	await get_tree().process_frame
 	
 	var root = get_tree().current_scene
-	print("DEBUG: Root-Knoten ist: ", root.name)
-	
-	print("DEBUG: Gesamte Knoten-Struktur:")
-	_list_nodes(root)
 	
 	# Direkte Suche
 	if root.has_node("Player"):
@@ -62,13 +58,17 @@ func _ready() -> void:
 		
 	if root.has_node("DialogueUI"):
 		dialogue_ui = root.get_node("DialogueUI")
+	for node in root.find_children("*", "CanvasLayer", true, false):
+		if node.name.to_lower().contains("fade") or (node.get_script() and "fade_out" in node):
+			fade_overlay = node
+			break
 		
 	if root.has_node("FadeOverlay"):
 		fade_overlay = root.get_node("FadeOverlay")
 	else:
 		fade_overlay = root.find_child("FadeOverlay", true, false)
 	
-	print("DEBUG: Gefunden -> Player: ", player, ", Girlfriend: ", girlfriend)
+	print("DEBUG: Gefunden -> Player: ", player, ", Girlfriend: ", girlfriend, ", FadeOverlay: ", fade_overlay)
 
 	# Signal-Verbindung sicherstellen
 	if dialogue_ui and not dialogue_ui.advance_requested.is_connected(_on_dialogue_advance):
