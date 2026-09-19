@@ -59,6 +59,13 @@ extends Node3D
 @export var min_vegetation_road_distance: float = 3.6
 @export var max_vegetation_road_distance: float = 33.0
 
+@export var min_fog_road_distance: float = 3.8
+@export var max_fog_road_distance: float = 20.0
+@export var fog_height: float = 7.0
+
+@export var fog_container: NodePath
+@export_range(0.0, 1.0, 0.01) var fog_strength: float = 1.0
+
 @export var max_spawn_attempts: int = 20000
 
 
@@ -189,6 +196,9 @@ func rebuild_all() -> void:
 	build_vegetation_data()
 
 	# Im Editor zunächst alles anzeigen.
+	build_vegetation_data()
+	build_fog_volumes()
+
 	# Im Spiel wird direkt auf den Spielerbereich reduziert.
 	if Engine.is_editor_hint():
 
@@ -410,7 +420,144 @@ func update_road_shader() -> void:
 	shader_material.set_shader_parameter(
 		"feather_amount",
 		feather_amount
+
 	)
+
+func build_fog_volumes() -> void:
+	var container = get_node_or_null(fog_container)
+	if not container:
+		print("ForestManager: FEHLER – fog_container ist nicht gesetzt.")
+		return
+
+	var fog_shader := load("res://shaders/road_fog.gdshader") as Shader
+	if fog_shader == null:
+		push_error("ForestManager: res://shaders/road_fog.gdshader konnte nicht geladen werden.")
+		return
+
+	var fog_material := ShaderMaterial.new()
+	fog_material.shader = fog_shader
+	var actual_density: float = fog_strength if fog_strength != null else 1.0
+	fog_material.set_shader_parameter("fog_density", actual_density)
+	fog_material.set_shader_parameter("fog_color", Color(0.015, 0.02, 0.035, 1.0))
+
+	var created_count := 0
+
+	for curve in get_all_roads():
+		var points := get_smooth_curve_points(curve)
+		if points.size() < 2:
+			continue
+
+		for side in [-1.0, 1.0]:
+			var st := SurfaceTool.new()
+			st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+			var slice_v_in_bot: Array[Vector3] = []
+			var slice_v_in_top: Array[Vector3] = []
+			var slice_v_out_top: Array[Vector3] = []
+			var slice_v_out_bot: Array[Vector3] = []
+
+			for i in range(points.size()):
+				var p := points[i]
+				var dir := Vector3.FORWARD
+				if i < points.size() - 1:
+					dir = (points[i + 1] - p).normalized()
+				else:
+					dir = (p - points[i - 1]).normalized()
+
+				var normal := Vector3(-dir.z, 0.0, dir.x).normalized()
+				if normal.length_squared() < 0.001:
+					normal = Vector3.RIGHT
+
+				var p_in : Vector3 = p + normal * side * min_fog_road_distance
+				var p_out : Vector3 = p + normal * side * max_fog_road_distance
+
+				slice_v_in_bot.append(p_in + Vector3(0.0, -0.5, 0.0))
+				slice_v_in_top.append(p_in + Vector3(0.0, fog_height, 0.0))
+				slice_v_out_top.append(p_out + Vector3(0.0, fog_height, 0.0))
+				slice_v_out_bot.append(p_out + Vector3(0.0, -0.5, 0.0))
+
+			var add_quad = func(v0: Vector3, uv0: Vector2, v1: Vector3, uv1: Vector2, v2: Vector3, uv2: Vector2, v3: Vector3, uv3: Vector2):
+				st.set_uv(uv0); st.add_vertex(v0)
+				st.set_uv(uv1); st.add_vertex(v1)
+				st.set_uv(uv2); st.add_vertex(v2)
+				st.set_uv(uv0); st.add_vertex(v0)
+				st.set_uv(uv2); st.add_vertex(v2)
+				st.set_uv(uv3); st.add_vertex(v3)
+
+			for i in range(points.size() - 1):
+				var A_ib := slice_v_in_bot[i]
+				var A_it := slice_v_in_top[i]
+				var A_ot := slice_v_out_top[i]
+				var A_ob := slice_v_out_bot[i]
+
+				var B_ib := slice_v_in_bot[i + 1]
+				var B_it := slice_v_in_top[i + 1]
+				var B_ot := slice_v_out_top[i + 1]
+				var B_ob := slice_v_out_bot[i + 1]
+
+				# 1. Top Face
+				add_quad.call(
+					A_it, Vector2(0.0, 1.0),
+					B_it, Vector2(0.0, 1.0),
+					B_ot, Vector2(1.0, 1.0),
+					A_ot, Vector2(1.0, 1.0)
+				)
+
+				# 2. Outer Face (deep forest side, 100% opaque sight block)
+				add_quad.call(
+					A_ot, Vector2(1.0, 1.0),
+					B_ot, Vector2(1.0, 1.0),
+					B_ob, Vector2(1.0, 0.0),
+					A_ob, Vector2(1.0, 0.0)
+				)
+
+				# 3. Inner Face (road side)
+				add_quad.call(
+					A_ib, Vector2(0.0, 0.0),
+					B_ib, Vector2(0.0, 0.0),
+					B_it, Vector2(0.0, 1.0),
+					A_it, Vector2(0.0, 1.0)
+				)
+
+				# 4. Bottom Face
+				add_quad.call(
+					A_ob, Vector2(1.0, 0.0),
+					B_ob, Vector2(1.0, 0.0),
+					B_ib, Vector2(0.0, 0.0),
+					A_ib, Vector2(0.0, 0.0)
+				)
+
+			var last_idx := points.size() - 1
+			# Start cap
+			add_quad.call(
+				slice_v_in_bot[0], Vector2(0.0, 0.0),
+				slice_v_in_top[0], Vector2(0.0, 1.0),
+				slice_v_out_top[0], Vector2(1.0, 1.0),
+				slice_v_out_bot[0], Vector2(1.0, 0.0)
+			)
+			# End cap
+			add_quad.call(
+				slice_v_out_bot[last_idx], Vector2(1.0, 0.0),
+				slice_v_out_top[last_idx], Vector2(1.0, 1.0),
+				slice_v_in_top[last_idx], Vector2(0.0, 1.0),
+				slice_v_in_bot[last_idx], Vector2(0.0, 0.0)
+			)
+
+			st.generate_normals()
+			var array_mesh := st.commit()
+
+			var mesh_instance := MeshInstance3D.new()
+			mesh_instance.mesh = array_mesh
+			mesh_instance.material_override = fog_material
+
+			container.add_child(mesh_instance)
+			created_count += 1
+
+			if Engine.is_editor_hint() and get_tree().edited_scene_root:
+				mesh_instance.owner = get_tree().edited_scene_root
+
+	print("ForestManager: %d Pfad-parallele Nebel-Instanzen erstellt." % created_count)
+
 
 
 # ============================================================
@@ -808,13 +955,13 @@ func build_chunk_type(
 		for i in range(instances.size()):
 			var entry: Dictionary = instances[i]
 			var pos: Vector2 = entry["position"]
-			var prop_transform := Transform3D(
+			var instance_transform := Transform3D(
 				Basis(Vector3.UP, entry["rotation"]).scaled(Vector3.ONE * entry["scale_factor"]),
 				Vector3(pos.x, 0.0, pos.y)
 			)
 			# Manager- und Container-Transforms werden explizit einbezogen. So
 			# bleiben Chunks Welt-koherent, auch wenn Container verschoben sind.
-			var world_transform := global_transform * prop_transform * local_transform
+			var world_transform : Transform3D = global_transform * instance_transform * local_transform
 			var transform: Transform3D = container.global_transform.affine_inverse() * world_transform
 			multi_mesh.set_instance_transform(i, transform)
 
@@ -853,43 +1000,7 @@ func build_chunk_type(
 					collision_shape.owner = get_tree().edited_scene_root
 
 
-			# Für jeden aktiven Chunk eine dichte Nebelwand / Barriere am äußeren Rand erzeugen
-			var world_pos := chunk_to_world(chunk)
-			var half_size := chunk_size * 0.5
-
-			# Physik-Barriere als Außenbegrenzung
-			var boundary_body := StaticBody3D.new()
-			boundary_body.name = "%d_%d_BoundaryWall" % [chunk.x, chunk.y]
-			container.add_child(boundary_body)
-			boundary_body.set_meta("wald_manager_chunk", chunk)
-
-			if Engine.is_editor_hint():
-				boundary_body.owner = get_tree().edited_scene_root
-
-			var box_shape := CollisionShape3D.new()
-			var box := BoxShape3D.new()
-			box.size = Vector3(chunk_size, 10.0, 1.0)
-			box_shape.shape = box
-			box_shape.position = Vector3(half_size, 5.0, half_size)
-			boundary_body.add_child(box_shape)
-
-			if Engine.is_editor_hint():
-				box_shape.owner = get_tree().edited_scene_root
-
-			# Visueller FogVolume-Block als undurchdringliche Nebelwand
-			var fv := FogVolume.new()
-			fv.name = "%d_%d_FogWall" % [chunk.x, chunk.y]
-			var fv_material := FogMaterial.new()
-			fv_material.density = 12.0
-			fv_material.albedo = Color(0.0, 0.0, 0.0, 1)
-			fv.material = fv_material
-			fv.size = Vector3(chunk_size, 8.0, 2.0)
-			fv.position = Vector3(half_size, 4.0, half_size)
-			container.add_child(fv)
-			fv.set_meta("wald_manager_chunk", chunk)
-
-			if Engine.is_editor_hint():
-				fv.owner = get_tree().edited_scene_root
+			# Keine pauschalen Rand-Wände mehr per Chunk, sondern entkoppelt
 
 
 # ============================================================
@@ -968,22 +1079,21 @@ func collect_meshes(
 			local_transform,
 			false
 		)
-		if child is MultiMeshInstance3D or child is StaticBody3D or child is FogVolume:
-			child.free()
-
 
 
 func clear_generated_chunks() -> void:
 	var containers := [
 		get_node_or_null(trees_container),
 		get_node_or_null(flowers_container),
-		get_node_or_null(rocks_container)
+		get_node_or_null(rocks_container),
+		get_node_or_null(fog_container)
 	]
+
 	for container in containers:
 		if container == null:
 			continue
 		for child in container.get_children():
-			if child is MultiMeshInstance3D or child is StaticBody3D:
+			if child is MultiMeshInstance3D or child is StaticBody3D or child is FogVolume or child is MeshInstance3D:
 				child.free()
 
 

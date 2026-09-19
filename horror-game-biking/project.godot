@@ -61,8 +61,6 @@ interact={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
 lights/shadows/positional_shadow/atlas_size=4096
 lights/shadows/positional_shadow/atlas_quadrant_0_subdiv=1
 lights/shadows/shadow_filtering/quality=2
