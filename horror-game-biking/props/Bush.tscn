@@ -1,0 +1,156 @@
+[gd_scene format=3 uid="uid://bushprop3d001"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
+albedo_color = Color(0.16, 0.12, 0.08, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_branch1"]
+material = SubResource("StandardMaterial3D_wood")
+top_radius = 0.015
+bottom_radius = 0.03
+height = 0.75
+radial_segments = 5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_branch2"]
+material = SubResource("StandardMaterial3D_wood")
+top_radius = 0.01
+bottom_radius = 0.025
+height = 0.6
+radial_segments = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_foliage_dark"]
+albedo_color = Color(0.06, 0.11, 0.07, 1)
+roughness = 0.9
+
+[sub_resource type="SphereMesh" id="SphereMesh_core"]
+material = SubResource("StandardMaterial3D_foliage_dark")
+radius = 0.48
+height = 0.75
+radial_segments = 6
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_foliage_mid"]
+albedo_color = Color(0.08, 0.15, 0.1, 1)
+roughness = 0.87
+
+[sub_resource type="SphereMesh" id="SphereMesh_main_top"]
+material = SubResource("StandardMaterial3D_foliage_mid")
+radius = 0.42
+height = 0.65
+radial_segments = 6
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_side_a"]
+material = SubResource("StandardMaterial3D_foliage_mid")
+radius = 0.35
+height = 0.55
+radial_segments = 6
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_side_b"]
+material = SubResource("StandardMaterial3D_foliage_dark")
+radius = 0.38
+height = 0.58
+radial_segments = 6
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_foliage_light"]
+albedo_color = Color(0.11, 0.18, 0.12, 1)
+roughness = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_side_c"]
+material = SubResource("StandardMaterial3D_foliage_light")
+radius = 0.33
+height = 0.52
+radial_segments = 6
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_bump_1"]
+material = SubResource("StandardMaterial3D_foliage_light")
+radius = 0.24
+height = 0.38
+radial_segments = 5
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_bump_2"]
+material = SubResource("StandardMaterial3D_foliage_mid")
+radius = 0.22
+height = 0.34
+radial_segments = 5
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_bump_3"]
+material = SubResource("StandardMaterial3D_foliage_dark")
+radius = 0.26
+height = 0.4
+radial_segments = 5
+rings = 3
+
+[sub_resource type="SphereMesh" id="SphereMesh_bump_4"]
+material = SubResource("StandardMaterial3D_foliage_light")
+radius = 0.2
+height = 0.32
+radial_segments = 5
+rings = 3
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bush"]
+height = 1.35
+radius = 0.65
+
+[node name="Bush" type="StaticBody3D" unique_id=479914605]
+
+[node name="Branch1" type="MeshInstance3D" parent="." unique_id=1894996581]
+transform = Transform3D(0.9396926, -0.0868241, 0.3310704, 0.1736482, 0.9698463, -0.1710101, -0.2961981, 0.2278788, 0.9275494, -0.05, 0.35, 0.02)
+mesh = SubResource("CylinderMesh_branch1")
+
+[node name="Branch2" type="MeshInstance3D" parent="." unique_id=1653336184]
+transform = Transform3D(0.8660254, 0.1294095, -0.4829629, -0.258819, 0.9512512, -0.2080005, 0.4330127, 0.3050186, 0.8480481, 0.04, 0.3, -0.03)
+mesh = SubResource("CylinderMesh_branch2")
+
+[node name="FoliageCore" type="MeshInstance3D" parent="." unique_id=725185730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("SphereMesh_core")
+
+[node name="FoliageTop" type="MeshInstance3D" parent="." unique_id=528862221]
+transform = Transform3D(0.9238795, 0, 0.3826834, 0.0991858, 0.9659258, -0.2391176, -0.3696438, 0.258819, 0.8923991, 0.03, 0.85, -0.04)
+mesh = SubResource("SphereMesh_main_top")
+
+[node name="FoliageSideNorth" type="MeshInstance3D" parent="." unique_id=1540108680]
+transform = Transform3D(0.8660254, 0.1736482, 0.4698463, -0.1736482, 0.9848078, -0.0449435, -0.4698463, -0.0449435, 0.8816053, 0.08, 0.62, -0.32)
+mesh = SubResource("SphereMesh_side_a")
+
+[node name="FoliageSideSouth" type="MeshInstance3D" parent="." unique_id=488537427]
+transform = Transform3D(0.7071068, -0.258819, -0.658037, 0.3535534, 0.9330127, 0.012941, 0.6123724, -0.241844, 0.752336, -0.06, 0.58, 0.34)
+mesh = SubResource("SphereMesh_side_b")
+
+[node name="FoliageSideEast" type="MeshInstance3D" parent="." unique_id=376055729]
+transform = Transform3D(0.819152, 0.2424039, -0.5202685, -0.3420201, 0.9396926, -0.000305, 0.460833, 0.17812, 0.869389, 0.35, 0.55, 0.06)
+mesh = SubResource("SphereMesh_side_c")
+
+[node name="FoliageSideWest" type="MeshInstance3D" parent="." unique_id=167863130]
+transform = Transform3D(0.8660254, -0.3213938, 0.3830222, 0.3420201, 0.9396926, -0.017101, -0.365366, 0.145802, 0.919379, -0.34, 0.56, -0.05)
+mesh = SubResource("SphereMesh_side_a")
+
+[node name="BumpCluster1" type="MeshInstance3D" parent="." unique_id=2045679695]
+transform = Transform3D(0.7071068, 0.5, 0.5, -0.4082483, 0.8660254, -0.2886751, -0.5773503, 0, 0.8164966, 0.28, 0.82, -0.22)
+mesh = SubResource("SphereMesh_bump_1")
+
+[node name="BumpCluster2" type="MeshInstance3D" parent="." unique_id=631369329]
+transform = Transform3D(0.8660254, -0.25, -0.4330127, 0.3535534, 0.9267767, 0.1268264, 0.3535534, -0.2630602, 0.8979315, -0.26, 0.78, 0.25)
+mesh = SubResource("SphereMesh_bump_2")
+
+[node name="BumpCluster3" type="MeshInstance3D" parent="." unique_id=1557389375]
+transform = Transform3D(0.5, -0.7071068, 0.5, 0.7071068, 0.7071068, 0, -0.5, 0.3535534, 0.7886751, -0.29, 0.42, -0.24)
+mesh = SubResource("SphereMesh_bump_3")
+
+[node name="BumpCluster4" type="MeshInstance3D" parent="." unique_id=1418359388]
+transform = Transform3D(0.8660254, 0.3535534, -0.3535534, -0.25, 0.9185587, 0.3061862, 0.4330127, -0.1767767, 0.8838835, 0.32, 0.45, 0.22)
+mesh = SubResource("SphereMesh_bump_4")
+
+[node name="BumpCluster5" type="MeshInstance3D" parent="." unique_id=479600405]
+transform = Transform3D(0.9659258, -0.1294095, 0.2241439, 0.1736482, 0.9698463, -0.1710101, -0.1950903, 0.2040608, 0.9592476, 0.02, 1.02, 0.15)
+mesh = SubResource("SphereMesh_bump_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=975086027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("CylinderShape3D_bush")
