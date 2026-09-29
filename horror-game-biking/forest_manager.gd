@@ -162,9 +162,7 @@ var _last_player_chunk := Vector2i(
 # ============================================================
 
 func _ready() -> void:
-
-	# Alte, im Editor serialisierte MultiMeshes werden sofort entfernt.
-	if Engine.is_editor_hint(): call_deferred("rebuild_all")
+	call_deferred("rebuild_all")
 
 
 # ============================================================
@@ -211,6 +209,9 @@ func rebuild_all() -> void:
 		return
 
 	_rebuild_running = true
+
+	# Deterministischer Seed für konsistente Generierung
+	seed(12345)
 
 	clear_generated_chunks()
 
@@ -939,15 +940,27 @@ func distance_to_road(position: Vector2) -> float:
 
 	var nearest := INF
 
-	for curve in get_all_roads():
+	var roads: Array[Path3D] = []
+	if main_road != null:
+		roads.append(main_road)
+	for branch in road_branches:
+		if branch != null:
+			roads.append(branch)
 
-		var points := get_smooth_curve_points(curve)
+	for path_node in roads:
+		if path_node == null or path_node.curve == null or path_node.curve.point_count < 2:
+			continue
+
+		var points := get_smooth_curve_points(path_node.curve)
 
 		for point3 in points:
 
+			var p_global := path_node.to_global(point3)
+			var p_local := to_local(p_global)
+
 			var point := Vector2(
-				point3.x,
-				point3.z
+				p_local.x,
+				p_local.z
 			)
 
 			var d := position.distance_to(point)
@@ -1349,33 +1362,6 @@ func build_chunk_type(
 		multi_mesh.mesh = mesh
 		multi_mesh.instance_count = instances.size()
 
-		var multi_instance := MultiMeshInstance3D.new()
-
-		multi_instance.multimesh = multi_mesh
-
-		multi_instance.name = (
-			"%d_%d_%s_%s"
-			% [
-				chunk.x,
-				chunk.y,
-				label,
-				key
-			]
-		)
-
-		container.add_child(multi_instance)
-
-		multi_instance.set_meta(
-			"wald_manager_chunk",
-			chunk
-		)
-
-		if Engine.is_editor_hint():
-
-			multi_instance.owner = (
-				get_tree().edited_scene_root
-			)
-
 		for i in range(instances.size()):
 
 			var entry: Dictionary = instances[i]
@@ -1416,109 +1402,142 @@ func build_chunk_type(
 				transform
 			)
 
-		if label == "Trees":
+		var multi_instance := MultiMeshInstance3D.new()
 
-			var static_body := StaticBody3D.new()
+		multi_instance.multimesh = multi_mesh
 
-			static_body.name = (
-				"%d_%d_Collision"
-				% [
-					chunk.x,
-					chunk.y
-				]
+		multi_instance.name = (
+			"%d_%d_%s_%s"
+			% [
+				chunk.x,
+				chunk.y,
+				label,
+				key
+			]
+		)
+
+		# Explicit custom_aabb prevents Godot frustum culling from prematurely culling MultiMeshes
+		var calc_aabb := multi_mesh.get_aabb()
+		if calc_aabb.size != Vector3.ZERO:
+			multi_instance.custom_aabb = calc_aabb.grow(2.0)
+
+		container.add_child(multi_instance)
+
+		multi_instance.set_meta(
+			"wald_manager_chunk",
+			chunk
+		)
+
+		if Engine.is_editor_hint():
+
+			multi_instance.owner = (
+				get_tree().edited_scene_root
 			)
 
-			container.add_child(static_body)
+	# Ein einziger StaticBody3D pro Baum-Chunk für Kollisionen
+	if label == "Trees":
 
-			static_body.set_meta(
-				"wald_manager_chunk",
-				chunk
+		var static_body := StaticBody3D.new()
+
+		static_body.name = (
+			"%d_%d_Collision"
+			% [
+				chunk.x,
+				chunk.y
+			]
+		)
+
+		container.add_child(static_body)
+
+		static_body.set_meta(
+			"wald_manager_chunk",
+			chunk
+		)
+
+		if Engine.is_editor_hint():
+
+			static_body.owner = (
+				get_tree().edited_scene_root
+			)
+
+		for i in range(entries.size()):
+
+			var entry: Dictionary = entries[i]
+
+			var pos: Vector2 = entry["position"]
+
+			var scale_factor: float = (
+				entry["scale_factor"]
+			)
+
+			var rot: float = entry["rotation"]
+
+			var prop_transform := Transform3D(
+				Basis(
+					Vector3.UP,
+					rot
+				).scaled(
+					Vector3.ONE *
+					scale_factor
+				),
+				Vector3(
+					pos.x,
+					0.0,
+					pos.y
+				)
+			)
+
+			var world_transform := (
+				global_transform *
+				prop_transform
+			)
+
+			var local_body_transform := (
+				static_body.global_transform
+				.affine_inverse() *
+				world_transform
+			)
+
+			var collision_shape := CollisionShape3D.new()
+
+			var cylinder := CylinderShape3D.new()
+
+			cylinder.radius = (
+				0.3 *
+				scale_factor *
+				0.90
+			)
+
+			cylinder.height = (
+				4.5 *
+				scale_factor
+			)
+
+			collision_shape.shape = cylinder
+
+			collision_shape.transform = (
+				local_body_transform.translated(
+					Vector3(
+						0.0,
+						(
+							4.5 *
+							scale_factor
+						) *
+						0.5,
+						0.0
+					)
+				)
+			)
+
+			static_body.add_child(
+				collision_shape
 			)
 
 			if Engine.is_editor_hint():
 
-				static_body.owner = (
+				collision_shape.owner = (
 					get_tree().edited_scene_root
 				)
-
-			for i in range(instances.size()):
-
-				var entry: Dictionary = instances[i]
-
-				var pos: Vector2 = entry["position"]
-
-				var scale_factor: float = (
-					entry["scale_factor"]
-				)
-
-				var rot: float = entry["rotation"]
-
-				var prop_transform := Transform3D(
-					Basis(
-						Vector3.UP,
-						rot
-					).scaled(
-						Vector3.ONE *
-						scale_factor
-					),
-					Vector3(
-						pos.x,
-						0.0,
-						pos.y
-					)
-				)
-
-				var world_transform := (
-					global_transform *
-					prop_transform
-				)
-
-				var local_body_transform := (
-					static_body.global_transform
-					.affine_inverse() *
-					world_transform
-				)
-
-				var collision_shape := CollisionShape3D.new()
-
-				var cylinder := CylinderShape3D.new()
-
-				cylinder.radius = (
-					0.3 *
-					scale_factor *
-					0.90
-				)
-
-				cylinder.height = (
-					4.5 *
-					scale_factor
-				)
-
-				collision_shape.shape = cylinder
-
-				collision_shape.transform = (
-					local_body_transform.translated(
-						Vector3(
-							0.0,
-							(
-								4.5 *
-								scale_factor
-							) *
-							0.5,
-							0.0
-						)
-					)
-				)
-
-				static_body.add_child(
-					collision_shape
-				)
-
-				if Engine.is_editor_hint():
-
-					collision_shape.owner = (
-						get_tree().edited_scene_root
-					)
 
 
 # ============================================================
