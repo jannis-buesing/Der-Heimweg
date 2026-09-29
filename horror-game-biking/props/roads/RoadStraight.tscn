@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://d1r0a4d5s7t8a"]
+
+[ext_resource type="Script" uid="uid://c8n9m0x1v2b3" path="res://props/roads/road_tile.gd" id="1_road_tile"]
+[ext_resource type="PackedScene" uid="uid://b1m2n3p4q5r6" path="res://props/StreetLight.tscn" id="2_streetlight"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asphalt"]
+albedo_color = Color(0.12, 0.12, 0.13, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_asphalt"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(6, 0.05, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paint"]
+albedo_color = Color(0.85, 0.85, 0.82, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_dash"]
+material = SubResource("StandardMaterial3D_paint")
+size = Vector3(0.18, 0.01, 2.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sidewalk"]
+albedo_color = Color(0.55, 0.54, 0.52, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_sidewalk"]
+material = SubResource("StandardMaterial3D_sidewalk")
+size = Vector3(3, 0.1, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_curb"]
+albedo_color = Color(0.42, 0.42, 0.45, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="BoxMesh_curb"]
+material = SubResource("StandardMaterial3D_curb")
+size = Vector3(0.2, 0.12, 12)
+
+[node name="RoadStraight" type="Node3D"]
+script = ExtResource("1_road_tile")
+
+[node name="Asphalt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("BoxMesh_asphalt")
+
+[node name="Markings" type="Node3D" parent="."]
+
+[node name="Dash1" type="MeshInstance3D" parent="Markings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, -3)
+mesh = SubResource("BoxMesh_dash")
+
+[node name="Dash2" type="MeshInstance3D" parent="Markings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 3)
+mesh = SubResource("BoxMesh_dash")
+
+[node name="SidewalkLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.05, 0)
+mesh = SubResource("BoxMesh_sidewalk")
+
+[node name="CurbLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, 0.06, 0)
+mesh = SubResource("BoxMesh_curb")
+
+[node name="SidewalkRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.05, 0)
+mesh = SubResource("BoxMesh_sidewalk")
+
+[node name="CurbRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 0.06, 0)
+mesh = SubResource("BoxMesh_curb")

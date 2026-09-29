@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://g1a2r3d4e5l6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal"]
+albedo_color = Color(0.12, 0.14, 0.16, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glow"]
+albedo_color = Color(1, 0.9, 0.6, 1)
+emission_enabled = true
+emission = Color(1, 0.85, 0.5, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_post"]
+material = SubResource("StandardMaterial3D_metal")
+top_radius = 0.04
+bottom_radius = 0.06
+height = 1.2
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_lantern"]
+material = SubResource("StandardMaterial3D_glow")
+size = Vector3(0.22, 0.3, 0.22)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_lamp"]
+height = 1.4
+radius = 0.15
+
+[node name="GardenLamp" type="StaticBody3D"]
+
+[node name="Post" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("CylinderMesh_post")
+
+[node name="Lantern" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("BoxMesh_lantern")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+light_color = Color(1, 0.88, 0.58, 1)
+light_energy = 1.2
+omni_range = 4.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("CylinderShape3D_lamp")

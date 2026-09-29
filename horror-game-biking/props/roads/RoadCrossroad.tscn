@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d4r0a4d5s7t8d"]
+
+[ext_resource type="Script" uid="uid://c8n9m0x1v2b3" path="res://props/roads/road_tile.gd" id="1_road_tile"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_asphalt"]
+albedo_color = Color(0.12, 0.12, 0.13, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_asphalt"]
+material = SubResource("StandardMaterial3D_asphalt")
+size = Vector3(12, 0.05, 12)
+
+[node name="RoadCrossroad" type="Node3D"]
+script = ExtResource("1_road_tile")
+road_type = 3
+
+[node name="Asphalt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
+mesh = SubResource("BoxMesh_asphalt")

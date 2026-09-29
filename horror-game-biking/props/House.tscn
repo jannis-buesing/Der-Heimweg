@@ -33,34 +33,52 @@ emission_energy_multiplier = 1.2
 albedo_color = Color(0.08, 0.09, 0.12, 1)
 roughness = 0.2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_found"]
+albedo_color = Color(0.18, 0.18, 0.19, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sil"]
+albedo_color = Color(0.02, 0.02, 0.03, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_room_wall"]
+albedo_color = Color(0.65, 0.60, 0.55, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_foundation"]
+material = SubResource("StandardMaterial3D_found")
+size = Vector3(7.7, 0.4, 9.2)
+
 [sub_resource type="BoxMesh" id="BoxMesh_body"]
 material = SubResource("StandardMaterial3D_wall_default")
-size = Vector3(7.5, 3.2, 9)
-subdivide_width = 4
-subdivide_height = 2
-subdivide_depth = 4
+size = Vector3(7.5, 3, 9)
 
 [sub_resource type="BoxMesh" id="BoxMesh_upper_body"]
 material = SubResource("StandardMaterial3D_wall_default")
 size = Vector3(7.5, 2.8, 9)
-subdivide_width = 4
-subdivide_height = 2
-subdivide_depth = 4
 
 [sub_resource type="PrismMesh" id="PrismMesh_roof_gable"]
 material = SubResource("StandardMaterial3D_roof_default")
-size = Vector3(8.1, 2.5, 9.6)
+size = Vector3(8.3, 2.5, 9.8)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_roof_hip"]
 material = SubResource("StandardMaterial3D_roof_default")
 top_radius = 0.1
-bottom_radius = 5.2
+bottom_radius = 5.3
 height = 2.2
 radial_segments = 4
 
 [sub_resource type="BoxMesh" id="BoxMesh_roof_flat"]
 material = SubResource("StandardMaterial3D_roof_default")
 size = Vector3(8.0, 0.3, 9.5)
+
+[sub_resource type="PrismMesh" id="PrismMesh_roof_mansard"]
+material = SubResource("StandardMaterial3D_roof_default")
+size = Vector3(8.1, 1.8, 9.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_roof_overhang"]
+material = SubResource("StandardMaterial3D_roof_default")
+size = Vector3(8.3, 0.1, 9.8)
 
 [sub_resource type="BoxMesh" id="BoxMesh_chimney"]
 material = SubResource("StandardMaterial3D_brick")
@@ -89,13 +107,23 @@ size = Vector3(0.08, 2.3, 0.08)
 [sub_resource type="BoxMesh" id="BoxMesh_garage_body"]
 material = SubResource("StandardMaterial3D_wall_default")
 size = Vector3(4.2, 2.8, 6.5)
-subdivide_width = 2
-subdivide_height = 2
-subdivide_depth = 3
 
 [sub_resource type="BoxMesh" id="BoxMesh_garage_door"]
 material = SubResource("StandardMaterial3D_garage_door")
 size = Vector3(3.2, 2.2, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ext_body"]
+material = SubResource("StandardMaterial3D_wall_default")
+size = Vector3(3.8, 2.7, 5.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_room_box"]
+material = SubResource("StandardMaterial3D_room_wall")
+size = Vector3(2.2, 2.2, 2.0)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_silhouette"]
+material = SubResource("StandardMaterial3D_sil")
+radius = 0.25
+height = 1.4
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_main"]
 size = Vector3(7.8, 4.7, 9.2)
@@ -106,39 +134,57 @@ size = Vector3(4.4, 3.0, 6.7)
 [node name="House" type="StaticBody3D"]
 script = ExtResource("1_house")
 
+[node name="Foundation" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("BoxMesh_foundation")
+
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0)
 mesh = SubResource("BoxMesh_body")
 
 [node name="UpperBody" type="MeshInstance3D" parent="."]
 visible = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.9, 0)
+mesh = SubResource("BoxMesh_upper_body")
+
+[node name="ThirdBody" type="MeshInstance3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.9, 0)
 mesh = SubResource("BoxMesh_upper_body")
 
 [node name="RoofGable" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.65, 0)
 mesh = SubResource("PrismMesh_roof_gable")
 
 [node name="RoofHip" type="MeshInstance3D" parent="."]
 visible = false
-transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 0, 4.3, 0)
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 4.5, 0)
 mesh = SubResource("CylinderMesh_roof_hip")
 
 [node name="RoofFlat" type="MeshInstance3D" parent="."]
 visible = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.35, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.55, 0)
 mesh = SubResource("BoxMesh_roof_flat")
 
+[node name="RoofMansard" type="MeshInstance3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.3, 0)
+mesh = SubResource("PrismMesh_roof_mansard")
+
+[node name="RoofOverhang" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, 0)
+mesh = SubResource("BoxMesh_roof_overhang")
+
 [node name="Chimney" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 5.2, 1.5)
 mesh = SubResource("BoxMesh_chimney")
 
 [node name="Door" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.05, -4.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 1.45, -4.52)
 mesh = SubResource("BoxMesh_door")
 
 [node name="Porch" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, -4.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.4, -4.5)
 
 [node name="PorchRoof" type="MeshInstance3D" parent="Porch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, -0.6)
@@ -155,30 +201,37 @@ mesh = SubResource("BoxMesh_porch_pillar")
 [node name="GroundWindows" type="Node3D" parent="."]
 
 [node name="WindowLit" type="MeshInstance3D" parent="GroundWindows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.6, -4.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.9, -4.52)
 mesh = SubResource("BoxMesh_window_lit")
 
 [node name="WindowDark" type="MeshInstance3D" parent="GroundWindows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.6, -4.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.9, -4.52)
 mesh = SubResource("BoxMesh_window")
 
 [node name="WindowSideLit" type="MeshInstance3D" parent="GroundWindows"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.77, 1.6, -1.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.77, 1.9, -1.5)
 mesh = SubResource("BoxMesh_window_lit")
 
 [node name="WindowSideDark" type="MeshInstance3D" parent="GroundWindows"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.77, 1.6, 1.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.77, 1.9, 1.5)
 mesh = SubResource("BoxMesh_window")
 
 [node name="UpperWindows" type="Node3D" parent="."]
 visible = false
 
 [node name="UpperWin1" type="MeshInstance3D" parent="UpperWindows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 4.5, -4.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 4.9, -4.52)
 mesh = SubResource("BoxMesh_window")
 
 [node name="UpperWin2" type="MeshInstance3D" parent="UpperWindows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 4.5, -4.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 4.9, -4.52)
+mesh = SubResource("BoxMesh_window")
+
+[node name="ExtensionWindows" type="Node3D" parent="."]
+visible = false
+
+[node name="ExtWin1" type="MeshInstance3D" parent="ExtensionWindows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 1.7, -2.77)
 mesh = SubResource("BoxMesh_window")
 
 [node name="Garage" type="Node3D" parent="."]
@@ -192,6 +245,31 @@ mesh = SubResource("BoxMesh_garage_body")
 [node name="GarageDoor" type="MeshInstance3D" parent="Garage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -3.27)
 mesh = SubResource("BoxMesh_garage_door")
+
+[node name="Extension" type="Node3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 0, 0)
+
+[node name="ExtensionBody" type="MeshInstance3D" parent="Extension"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+mesh = SubResource("BoxMesh_ext_body")
+
+[node name="RoomInterior" type="Node3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.9, -3.5)
+
+[node name="RoomBox" type="MeshInstance3D" parent="RoomInterior"]
+mesh = SubResource("BoxMesh_room_box")
+
+[node name="RoomLight" type="OmniLight3D" parent="RoomInterior"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+light_color = Color(1, 0.85, 0.55, 1)
+light_energy = 1.8
+omni_range = 3.5
+
+[node name="PersonSilhouette" type="MeshInstance3D" parent="RoomInterior"]
+transform = Transform3D(0.35, 0, 0, 0, 1.4, 0, 0, 0, 0.2, 0, 0, -0.4)
+mesh = SubResource("CapsuleMesh_silhouette")
 
 [node name="CollisionMain" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.35, 0)

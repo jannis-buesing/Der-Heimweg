@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://g2f3u4r5n6i7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_table"]
+albedo_color = Color(0.28, 0.20, 0.15, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_table_top"]
+material = SubResource("StandardMaterial3D_table")
+top_radius = 0.65
+bottom_radius = 0.65
+height = 0.06
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_leg"]
+material = SubResource("StandardMaterial3D_table")
+top_radius = 0.04
+bottom_radius = 0.04
+height = 0.7
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_chair_seat"]
+material = SubResource("StandardMaterial3D_table")
+size = Vector3(0.45, 0.05, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chair_back"]
+material = SubResource("StandardMaterial3D_table")
+size = Vector3(0.45, 0.45, 0.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_table"]
+size = Vector3(1.4, 0.8, 1.4)
+
+[node name="GardenFurniture" type="StaticBody3D"]
+
+[node name="TableTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("CylinderMesh_table_top")
+
+[node name="TableLeg" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+mesh = SubResource("CylinderMesh_leg")
+
+[node name="Chair1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0, 0)
+
+[node name="Seat" type="MeshInstance3D" parent="Chair1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("BoxMesh_chair_seat")
+
+[node name="Back" type="MeshInstance3D" parent="Chair1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.7, 0)
+mesh = SubResource("BoxMesh_chair_back")
+
+[node name="Chair2" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.85, 0, 0)
+
+[node name="Seat" type="MeshInstance3D" parent="Chair2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("BoxMesh_chair_seat")
+
+[node name="Back" type="MeshInstance3D" parent="Chair2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.7, 0)
+mesh = SubResource("BoxMesh_chair_back")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_table")

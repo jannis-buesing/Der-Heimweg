@@ -1,136 +1,130 @@
 # sound_manager.gd
-# Erzeugt alle Fahrrad- und Umgebungsgeraeusche prozedural (AudioStreamGenerator).
-# Keine externen Audiodateien benoetigt.
-# Kommunikation: Liest Spielergeschwindigkeit ueber Gruppe "player".
+# Central Audio Manager supporting dynamic bike sound synthesis,
+# sample playback, environmental loops, and horror triggers.
 
 extends Node
 
-const SAMPLE_RATE: float = 44100.0
+# Audio Players
+var _bike_tire_player: AudioStreamPlayer
+var _bike_chain_player: AudioStreamPlayer
+var _bike_pedal_player: AudioStreamPlayer
+var _bike_sfx_player: AudioStreamPlayer
 
-# Interner LCG-Rauschgenerator (schneller als randi())
-var _noise_seed: int = 54321
-
-# Glaettungszustand fuer Wind-Lowpass
-var _wind_lp: float = 0.0
-var _rolling_lp: float = 0.0
-
-var _rolling_phase: float = 0.0
-var _ambient_phase: float = 0.0
-
-# Zielwerte (werden geglaettet)
-var _wind_vol_target: float = -60.0
-var _rolling_vol_target: float = -60.0
-
+var _forest_ambient_player: AudioStreamPlayer
 var _wind_player: AudioStreamPlayer
-var _rolling_player: AudioStreamPlayer
-var _ambient_player: AudioStreamPlayer
+var _village_ambient_player: AudioStreamPlayer
+var _horror_drone_player: AudioStreamPlayer
 
-var _wind_pb: AudioStreamGeneratorPlayback
-var _rolling_pb: AudioStreamGeneratorPlayback
-var _ambient_pb: AudioStreamGeneratorPlayback
+# Preloaded AudioStreams
+var sound_bike_bell: AudioStream = load("res://Audio/Bike/bike_bell.wav")
+var sound_bike_brake: AudioStream = load("res://Audio/Bike/bike_brake.wav")
+var sound_bike_light: AudioStream = load("res://Audio/Bike/bike_light_switch.wav")
+
+var sound_forest_night: AudioStream = load("res://Audio/Environment/Forest/forest_night_loop.wav")
+var sound_forest_wind: AudioStream = load("res://Audio/Environment/Forest/forest_wind_light.wav")
+var sound_tire_asphalt: AudioStream = load("res://Audio/Bike/bike_tire_asphalt.wav")
+var sound_chain_loop: AudioStream = load("res://Audio/Bike/bike_chain_loop.wav")
+var sound_pedal_loop: AudioStream = load("res://Audio/Bike/bike_pedal_loop.wav")
+var sound_village_ambient: AudioStream = load("res://Audio/Environment/Village/village_ambient_night.wav")
+var sound_horror_drone: AudioStream = load("res://Audio/Horror/subtle_drone_night.wav")
+
+# State tracking for dynamic bike audio
+var _prev_speed: float = 0.0
+var _is_braking_prev: bool = false
 
 
 func _ready() -> void:
-	_wind_player   = _make_player("Environment", 0.2)
-	_rolling_player = _make_player("SFX", 0.15)
-	_ambient_player = _make_player("Environment", 0.25)
-
-	add_child(_wind_player)
-	add_child(_rolling_player)
-	add_child(_ambient_player)
-
-	# Kurz warten, dann Playback-Referenzen holen (erst nach play() verfuegbar)
-	_wind_player.play()
-	_rolling_player.play()
-	_ambient_player.play()
-
-	await get_tree().process_frame
-	await get_tree().process_frame
-
-	_wind_pb    = _wind_player.get_stream_playback()    as AudioStreamGeneratorPlayback
-	_rolling_pb = _rolling_player.get_stream_playback() as AudioStreamGeneratorPlayback
-	_ambient_pb = _ambient_player.get_stream_playback() as AudioStreamGeneratorPlayback
+	_setup_audio_players()
+	_start_ambient_loops()
 
 
-func _make_player(bus: String, buf_len: float) -> AudioStreamPlayer:
-	var p := AudioStreamPlayer.new()
-	p.bus = bus
+func _setup_audio_players() -> void:
+	_bike_tire_player = _create_player("Bike", sound_tire_asphalt, true)
+	_bike_chain_player = _create_player("Bike", sound_chain_loop, true)
+	_bike_pedal_player = _create_player("Bike", sound_pedal_loop, true)
+	_bike_sfx_player = _create_player("Bike", null, false)
+	
+	_forest_ambient_player = _create_player("Environment", sound_forest_night, true)
+	_wind_player = _create_player("Environment", sound_forest_wind, true)
+	_village_ambient_player = _create_player("Environment", sound_village_ambient, true)
+	_horror_drone_player = _create_player("Horror", sound_horror_drone, true)
+
+
+func _create_player(bus_name: String, stream: AudioStream, auto_play: bool) -> AudioStreamPlayer:
+	var p = AudioStreamPlayer.new()
+	p.bus = bus_name if AudioServer.get_bus_index(bus_name) != -1 else "Master"
 	p.volume_db = -60.0
-	var gen := AudioStreamGenerator.new()
-	gen.mix_rate = SAMPLE_RATE
-	gen.buffer_length = buf_len
-	p.stream = gen
+	p.stream = stream
+	add_child(p)
+	if auto_play and stream != null:
+		p.play()
 	return p
 
 
+func _start_ambient_loops() -> void:
+	if _forest_ambient_player and _forest_ambient_player.stream:
+		_forest_ambient_player.volume_db = -24.0
+	if _wind_player and _wind_player.stream:
+		_wind_player.volume_db = -30.0
+
+
 func _process(delta: float) -> void:
-	# Spielergeschwindigkeit lesen
+	_update_bike_audio(delta)
+
+
+func _update_bike_audio(delta: float) -> void:
 	var speed := 0.0
+	var player_node: Node3D = null
+	
 	var players := get_tree().get_nodes_in_group("player")
 	if not players.is_empty():
-		var p := players[0] as CharacterBody3D
-		if p:
-			speed = p.velocity.length()
+		player_node = players[0] as Node3D
+		if "velocity" in player_node:
+			speed = player_node.velocity.length()
+	
+	var norm_speed := clamp(speed / 7.0, 0.0, 1.0) # 0 to 1 scaling (up to ~25 km/h)
+	var accel := (speed - _prev_speed) / max(delta, 0.001)
+	_prev_speed = speed
+	
+	# Tire Rolling Volume & Pitch
+	if norm_speed > 0.02:
+		var target_tire_vol = lerp(-40.0, -12.0, norm_speed)
+		_bike_tire_player.volume_db = lerp(_bike_tire_player.volume_db, target_tire_vol, 6.0 * delta)
+		_bike_tire_player.pitch_scale = lerp(0.8, 1.4, norm_speed)
+	else:
+		_bike_tire_player.volume_db = lerp(_bike_tire_player.volume_db, -60.0, 8.0 * delta)
+	
+	# Pedal & Chain Cadence (only audible when accelerating/pedaling)
+	if accel > 0.1 and norm_speed > 0.05:
+		var target_pedal_vol = lerp(-36.0, -14.0, norm_speed)
+		_bike_pedal_player.volume_db = lerp(_bike_pedal_player.volume_db, target_pedal_vol, 8.0 * delta)
+		_bike_pedal_player.pitch_scale = lerp(0.7, 1.5, norm_speed)
+		
+		_bike_chain_player.volume_db = lerp(_bike_chain_player.volume_db, target_pedal_vol - 4.0, 8.0 * delta)
+		_bike_chain_player.pitch_scale = lerp(0.8, 1.3, norm_speed)
+	else:
+		# Freewheel / Coasting
+		_bike_pedal_player.volume_db = lerp(_bike_pedal_player.volume_db, -60.0, 6.0 * delta)
+		_bike_chain_player.volume_db = lerp(_bike_chain_player.volume_db, -60.0, 6.0 * delta)
+	
+	# Brake squeal detection
+	var is_braking = (accel < -2.0 and speed > 1.0)
+	if is_braking and not _is_braking_prev:
+		play_sfx(sound_bike_brake, -10.0)
+	_is_braking_prev = is_braking
 
-	var t: float = clamp(speed / 5.2, 0.0, 1.0)  # Normierung 0..1
 
-	# Ziel-Lautstaerken
-	_wind_vol_target    = lerp(-52.0, -22.0, t)
-	_rolling_vol_target = lerp(-60.0, -30.0, t)
-
-	# Lautstaerken sanft anpassen
-	_wind_player.volume_db    = lerp(_wind_player.volume_db,    _wind_vol_target,    4.0 * delta)
-	_rolling_player.volume_db = lerp(_rolling_player.volume_db, _rolling_vol_target, 4.0 * delta)
-	# Ambient ist konstant leise
-	_ambient_player.volume_db = lerp(_ambient_player.volume_db, -38.0, 2.0 * delta)
-
-	_fill_wind(t)
-	_fill_rolling(t)
-	_fill_ambient()
-
-
-func _noise() -> float:
-	_noise_seed = (_noise_seed * 1664525 + 1013904223) & 0x7FFFFFFF
-	return float(_noise_seed) / 2147483647.0 * 2.0 - 1.0
-
-
-func _fill_wind(t: float) -> void:
-	if not _wind_pb:
+func play_sfx(stream: AudioStream, volume_db: float = 0.0) -> void:
+	if stream == null or _bike_sfx_player == null:
 		return
-	var frames := _wind_pb.get_frames_available()
-	for _i in frames:
-		# Lowpass-gefiltertes Rauschen (sanfter Wind)
-		_wind_lp += (_noise() - _wind_lp) * 0.08
-		var s := _wind_lp * 0.6
-		# Leichte Stereo-Variation
-		_wind_pb.push_frame(Vector2(s * 0.95, s * 1.05))
+	_bike_sfx_player.stream = stream
+	_bike_sfx_player.volume_db = volume_db
+	_bike_sfx_player.play()
 
 
-func _fill_rolling(t: float) -> void:
-	if not _rolling_pb:
-		return
-	var frames := _rolling_pb.get_frames_available()
-	# Rollfrequenz steigt mit Geschwindigkeit
-	var base_freq: float = lerp(35.0, 110.0, t)
-	var phase_step: float = base_freq / SAMPLE_RATE * TAU
-
-	for _i in frames:
-		_rolling_phase = fmod(_rolling_phase + phase_step, TAU)
-		_rolling_lp += (_noise() - _rolling_lp) * 0.12
-		# Grundton (Kette/Rad) + koerniges Rauschen
-		var tone := sin(_rolling_phase) * 0.12
-		var grain := _rolling_lp * 0.08
-		var s := (tone + grain) * t
-		_rolling_pb.push_frame(Vector2(s, s))
+func play_bell() -> void:
+	play_sfx(sound_bike_bell, -6.0)
 
 
-func _fill_ambient() -> void:
-	if not _ambient_pb:
-		return
-	var frames := _ambient_pb.get_frames_available()
-	for _i in frames:
-		_ambient_phase += 0.3 / SAMPLE_RATE
-		# Sehr langsam moduliertes Rauschen (Nachtambiente)
-		var mod := sin(_ambient_phase) * 0.012 + 0.018
-		var s := _noise() * mod
-		_ambient_pb.push_frame(Vector2(s, s))
+func play_light_switch() -> void:
+	play_sfx(sound_bike_light, -12.0)

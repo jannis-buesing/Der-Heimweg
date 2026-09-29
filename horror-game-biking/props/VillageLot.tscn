@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://v1i2l3l4o5t6"]
+
+[ext_resource type="Script" uid="uid://c1l2o3t4s5c6" path="res://props/village_lot.gd" id="1_lot"]
+[ext_resource type="PackedScene" uid="uid://df7k4v8mp3q1n" path="res://props/House.tscn" id="2_house"]
+[ext_resource type="PackedScene" uid="uid://d1m2a3i4l5b6" path="res://props/Mailbox.tscn" id="3_mailbox"]
+[ext_resource type="PackedScene" uid="uid://f1e2n3c4e5s6" path="res://props/Fence.tscn" id="4_fence"]
+[ext_resource type="PackedScene" uid="uid://t1r2a3s4h5b6" path="res://props/TrashBin.tscn" id="5_trashbin"]
+[ext_resource type="PackedScene" uid="uid://b1u2s3h4p5r6" path="res://props/Bush.tscn" id="6_bush"]
+[ext_resource type="PackedScene" uid="uid://g1a2r3d4e5l6" path="res://props/GardenLamp.tscn" id="7_lamp"]
+[ext_resource type="PackedScene" uid="uid://g2f3u4r5n6i7" path="res://props/GardenFurniture.tscn" id="8_furniture"]
+[ext_resource type="PackedScene" uid="uid://cb5k8v4pm3q2a" path="res://props/WoodPile.tscn" id="9_woodpile"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grass"]
+albedo_color = Color(0.18, 0.28, 0.15, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+material = SubResource("StandardMaterial3D_grass")
+size = Vector3(16, 0.04, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_path"]
+albedo_color = Color(0.4, 0.38, 0.35, 1)
+roughness = 0.85
+
+[sub_resource type="BoxMesh" id="BoxMesh_pathway"]
+material = SubResource("StandardMaterial3D_path")
+size = Vector3(1.4, 0.05, 5.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_driveway"]
+material = SubResource("StandardMaterial3D_path")
+size = Vector3(3.6, 0.05, 6.5)
+
+[node name="VillageLot" type="Node3D"]
+script = ExtResource("1_lot")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("BoxMesh_ground")
+
+[node name="Pathway" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0.025, -7.25)
+mesh = SubResource("BoxMesh_pathway")
+
+[node name="Driveway" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 0.025, -6.75)
+mesh = SubResource("BoxMesh_driveway")
+
+[node name="House" parent="." instance=ExtResource("2_house")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+
+[node name="Mailbox" parent="." instance=ExtResource("3_mailbox")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.02, -9)
+
+[node name="TrashBins" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 0.02, -9)
+
+[node name="TrashBin1" parent="TrashBins" instance=ExtResource("5_trashbin")]
+
+[node name="Fence" type="Node3D" parent="."]
+
+[node name="FenceL" parent="Fence" instance=ExtResource("4_fence")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8, 0.02, 0)
+
+[node name="FenceR" parent="Fence" instance=ExtResource("4_fence")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 0.02, 0)
+
+[node name="Bushes" type="Node3D" parent="."]
+
+[node name="Bush1" parent="Bushes" instance=ExtResource("6_bush")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0.02, -7.5)
+
+[node name="Bush2" parent="Bushes" instance=ExtResource("6_bush")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 4.5, 0.02, -7)
+
+[node name="Bush3" parent="Bushes" instance=ExtResource("6_bush")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -0.6, 0.02, -7.2)
+
+[node name="GardenLamp" parent="." instance=ExtResource("7_lamp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8, 0.02, -6.8)
+
+[node name="GardenFurniture" parent="." instance=ExtResource("8_furniture")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 0.02, -2.5)
+
+[node name="WoodPile" parent="." instance=ExtResource("9_woodpile")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0, 0.02, 3.5)
