@@ -99,11 +99,13 @@ func _start_sequence() -> void:
 	player.controls_enabled = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-	# Fahrrad auf FuÃŸweg ausblenden
+	# Fahrrad und Spielermodell auf Fussweg ausblenden
 	if player.has_method("set_bike_visible"):
 		player.set_bike_visible(false)
+	if player.has_method("set_player_model_visible"):
+		player.set_player_model_visible(false)
 
-	# 2. Fahrradlicht am Anfang auf FuÃŸweg AUSschalten
+	# 2. Fahrradlicht am Anfang auf Fussweg AUSschalten
 	if "is_light_on" in player:
 		player.is_light_on = false
 		if player.has_method("_apply_light_state"):
@@ -114,7 +116,7 @@ func _start_sequence() -> void:
 	if girlfriend:
 		gf_pos = girlfriend.global_position
 
-	# 4. Spieler zu FuÃŸ vor Marieke platzieren
+	# 4. Spieler zu Fuss vor Marieke platzieren
 	player.global_position = gf_pos - Vector3(1.6, 0.0, 0.0) # 1.6m links von Marieke
 	player.rotation.y = deg_to_rad(-90.0) # blickt nach +X zu Marieke
 
@@ -153,8 +155,7 @@ func _on_dialog_1_finished() -> void:
 	
 	current_state = SequenceState.FADE_OUT
 	if fade_overlay:
-		print("DEBUG: FÃ¼hre Fade-Out aus...")
-		# Hier stellen wir sicher, dass fade_out aufgerufen wird
+		print("DEBUG: Fuehre Fade-Out aus...")
 		if fade_overlay.has_method("fade_out"):
 			await fade_overlay.fade_out(1.0)
 		else:
@@ -171,9 +172,11 @@ func _on_dialog_1_finished() -> void:
 func _setup_bike_position() -> void:
 	current_state = SequenceState.BIKE_SETUP
 
-	# Fahrrad auf der Strasse wieder einblenden
+	# Fahrrad auf der Strasse wieder einblenden (Spielerkoerper bleibt noch ausgeblendet!)
 	if player.has_method("set_bike_visible"):
 		player.set_bike_visible(true)
+	if player.has_method("set_player_model_visible"):
+		player.set_player_model_visible(false)
 
 	# Spieler auf das Fahrrad auf der Strasse versetzen (Blickrichtung -Z)
 	player.global_position = Vector3(0.0, 0.0, 70.0)
@@ -228,6 +231,10 @@ func _rotate_camera_to_front() -> void:
 	tween.tween_method(func(val: float): player.set_camera_angles(player._yaw, val), start_pitch, 0.0, 1.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished
 
+	# Sobald die Kamera wieder nach vorne schaut, wird der Spielerkoerper (Arme am Lenker) sichtbar!
+	if player.has_method("set_player_model_visible"):
+		player.set_player_model_visible(true)
+
 	_show_dialog_2()
 
 
@@ -239,5 +246,7 @@ func _show_dialog_2() -> void:
 
 func _finish_sequence() -> void:
 	current_state = SequenceState.GAMEPLAY
+	if player.has_method("set_player_model_visible"):
+		player.set_player_model_visible(true)
 	player.controls_enabled = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

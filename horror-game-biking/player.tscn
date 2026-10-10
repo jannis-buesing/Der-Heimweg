@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://csbc6if2etbwf" path="res://player.gd" id="1_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://c6f2vhx8u3kqa" path="res://Bike.tscn" id="2_hqtel"]
 [ext_resource type="Script" uid="uid://c5mgfneyh8ne4" path="res://interaction_manager.gd" id="3_sweqy"]
+[ext_resource type="PackedScene" uid="uid://cxila4eed5m8j" path="res://assets/characters/Models/Male/Character_03.fbx" id="4_char03"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jap5i"]
 height = 1.9801025
@@ -19,6 +20,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4877144, -0.117378235)
 current = true
 
 [node name="Bike" parent="." unique_id=298910088 instance=ExtResource("2_hqtel")]
+
+[node name="PlayerModel" parent="." unique_id=901234567 instance=ExtResource("4_char03")]
+transform = Transform3D(-0.4, 0, 6.039832e-08, 0, 0.4, 0, -6.039832e-08, 0, -0.4, 0, 0.39999998, 0)
 
 [node name="InteractionManager" type="Node3D" parent="." unique_id=337641846]
 script = ExtResource("3_sweqy")
